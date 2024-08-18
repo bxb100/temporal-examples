@@ -1,0 +1,39 @@
+[workspace]
+members = ["hello-world", "helper"]
+exclude = [
+    "sdk-core" # exclude the submodule
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+authors = ["Lemon"]
+version = "0.1.0"
+
+[profile.dev]
+debug = true
+
+[workspace.dependencies]
+temporal-client = { path = "sdk-core/client" }
+temporal-sdk = { path = "sdk-core/sdk" }
+temporal-sdk-core = { path = "sdk-core/core" }
+temporal-sdk-core-api = { path = "sdk-core/core-api" }
+temporal-sdk-core-protos = { path = "sdk-core/sdk-core-protos" }
+helper = { path = "helper" }
+
+# other dependencies
+dotenv = "0.15.0"
+anyhow = "1.0.86"
+env_logger = "0.11.5"
+log = "0.4.22"
+tokio = { version = "1.39.3", features = []}
+nanoid = "0.4.0"
+
+[workspace.lints.clippy]
+all = { level = "allow", priority = -1 }
+dbg_macro = "warn"
+disallowed_methods = "warn"
+print_stderr = "warn"
+print_stdout = "warn"
+self_named_module_files = "warn"
