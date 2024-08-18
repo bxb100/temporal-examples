@@ -17,8 +17,3 @@ cargo run
 ```shell
 cargo run --bin client
 ```
-
-### References
-
-- https://github.com/cosm-public/temporal-samples-rust
-- https://github.com/temporalio/sdk-core
