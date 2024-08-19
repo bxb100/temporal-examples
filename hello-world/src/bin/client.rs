@@ -1,9 +1,9 @@
 use anyhow::Result;
-use helper::clients::{get_client, start_workflow};
+use helper::clients::get_client;
 use helper::PayloadExt;
 use log::info;
 use nanoid::nanoid;
-use temporal_client::{WfClientExt, WorkflowExecutionResult, WorkflowOptions};
+use temporal_client::{WfClientExt, WorkflowClientTrait, WorkflowExecutionResult, WorkflowOptions};
 use temporal_sdk_core::protos::coresdk::AsJsonPayloadExt;
 
 #[tokio::main]
@@ -11,19 +11,20 @@ async fn main() -> Result<()> {
     dotenv::dotenv().ok();
     env_logger::init();
 
-    let mut client = get_client().await?;
+    let client = get_client().await?;
 
     let workflow_id = format!("workflow-{}", nanoid!());
-    let handle = start_workflow(
-        &mut client,
-        vec!["Temporal".as_json_payload()?],
-        "hello-world".to_string(), // task queue
-        workflow_id.to_owned(),    // workflow id
-        "example".to_string(),     // workflow type
-        None,
-        WorkflowOptions::default(),
-    )
-    .await?;
+
+    let handle = client
+        .start_workflow(
+            vec!["Temporal".as_json_payload()?],
+            "hello-world".to_string(), // task queue
+            workflow_id.to_owned(),    // workflow id
+            "example".to_string(),     // workflow type
+            None,
+            WorkflowOptions::default(),
+        )
+        .await?;
 
     info!(
         "Started workflow with ID: {workflow_id} and run ID: {}",
