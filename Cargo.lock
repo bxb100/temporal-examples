@@ -774,7 +774,6 @@ dependencies = [
  "helper",
  "log",
  "nanoid",
- "serde_json",
  "temporal-client",
  "temporal-sdk",
  "temporal-sdk-core",

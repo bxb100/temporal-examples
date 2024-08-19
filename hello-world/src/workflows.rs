@@ -1,6 +1,6 @@
 use helper::parse_activity_result::parse_activity_result;
-use std::time::Duration;
 use log::info;
+use std::time::Duration;
 use temporal_sdk::{ActivityOptions, WfContext, WfExitValue, WorkflowResult};
 
 /// A workflow that simply calls an activity

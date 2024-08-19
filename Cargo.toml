@@ -25,10 +25,12 @@ helper = { path = "helper" }
 # other dependencies
 dotenv = "0.15.0"
 anyhow = "1.0.86"
-env_logger = "0.11.5"
 log = "0.4.22"
+env_logger = "0.11.5"
 tokio = { version = "1.39.3", features = []}
 nanoid = "0.4.0"
+serde = { version = "1.0.208", features = ["derive"] }
+serde_json = "1.0.125"
 
 [workspace.lints.clippy]
 all = { level = "allow", priority = -1 }

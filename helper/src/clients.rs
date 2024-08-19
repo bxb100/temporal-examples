@@ -6,7 +6,9 @@ use temporal_sdk_core::protos::coresdk::IntoPayloadsExt;
 use temporal_sdk_core::protos::temporal::api::common::v1::{Payload, WorkflowType};
 use temporal_sdk_core::protos::temporal::api::enums::v1::TaskQueueKind;
 use temporal_sdk_core::protos::temporal::api::taskqueue::v1::TaskQueue;
-use temporal_sdk_core::protos::temporal::api::workflowservice::v1::{StartWorkflowExecutionRequest, StartWorkflowExecutionResponse};
+use temporal_sdk_core::protos::temporal::api::workflowservice::v1::{
+    StartWorkflowExecutionRequest, StartWorkflowExecutionResponse,
+};
 use temporal_sdk_core::Url;
 use uuid::Uuid;
 
@@ -27,6 +29,8 @@ pub async fn get_client() -> Result<RetryClient<Client>, anyhow::Error> {
 }
 
 /// this copy from [temporal_client::WorkflowClientTrait]
+///
+/// FIXME: remove this when Jetbrains fix the issue: #RUST-15459
 pub async fn start_workflow(
     client: &mut RetryClient<Client>,
     input: Vec<Payload>,
@@ -38,6 +42,9 @@ pub async fn start_workflow(
 ) -> Result<StartWorkflowExecutionResponse, tonic::Status> {
     Ok(client
         .start_workflow_execution(StartWorkflowExecutionRequest {
+            // it should use the namespace from the client
+            // `client.namespace().to_string()` from [temporal_client::WorkflowClientTrait]
+            // again this is a workaround for the issue: #RUST-15459
             namespace: NAMESPACE.to_string(),
             input: input.into_payloads(),
             workflow_id,

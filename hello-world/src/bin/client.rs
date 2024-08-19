@@ -1,5 +1,6 @@
 use anyhow::Result;
 use helper::clients::{get_client, start_workflow};
+use helper::PayloadExt;
 use log::info;
 use nanoid::nanoid;
 use temporal_client::{WfClientExt, WorkflowExecutionResult, WorkflowOptions};
@@ -35,8 +36,12 @@ async fn main() -> Result<()> {
         .await?;
 
     if let WorkflowExecutionResult::Succeeded(result) = res {
-        info!("payload type is json/plain: {}", result[0].is_json_payload());
-        info!("Result: {}", serde_json::from_slice::<String>(&result[0].data)?);
+        let payload = &result[0];
+
+        assert!(payload.is_json_payload());
+        assert_eq!("Hello, Temporal!", payload.to_str()?);
+
+        info!("Result: {}", payload.to_str()?);
     } else {
         info!("Workflow failed with result: {:?}", res);
     }
