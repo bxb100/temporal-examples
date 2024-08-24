@@ -4,9 +4,8 @@ set dotenv-load
 
 default := invocation_directory()
 
-
-@rustfmt:
-  find {{invocation_directory()}} -name \*.rs -exec rustfmt {} \;
+@fmt:
+  cargo fmt --check
 
 @temporal:
   temporal server start-dev
