@@ -3,6 +3,25 @@
 version = 3
 
 [[package]]
+name = "activities-cancellation-heartbeating"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "dotenv",
+ "env_logger",
+ "helper",
+ "log",
+ "nanoid",
+ "rand",
+ "temporal-client",
+ "temporal-sdk",
+ "temporal-sdk-core",
+ "temporal-sdk-core-api",
+ "temporal-sdk-core-protos",
+ "tokio",
+]
+
+[[package]]
 name = "addr2line"
 version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

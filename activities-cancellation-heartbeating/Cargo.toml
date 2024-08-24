@@ -1,0 +1,25 @@
+[package]
+name = "activities-cancellation-heartbeating"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+version.workspace = true
+
+[dependencies]
+temporal-sdk.workspace = true
+temporal-client.workspace = true
+temporal-sdk-core.workspace = true
+temporal-sdk-core-protos.workspace = true
+temporal-sdk-core-api.workspace = true
+anyhow.workspace = true
+
+dotenv.workspace = true
+helper.workspace = true
+env_logger.workspace = true
+log.workspace = true
+tokio.workspace = true
+nanoid.workspace = true
+rand.workspace = true
+
+[lints]
+workspace = true

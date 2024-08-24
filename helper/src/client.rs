@@ -4,8 +4,6 @@ use temporal_client::{Client, RetryClient};
 use temporal_sdk::sdk_client_options;
 use temporal_sdk_core::Url;
 
-pub static NAMESPACE: &str = "default";
-
 pub async fn get_client() -> Result<RetryClient<Client>, anyhow::Error> {
     let hostname = gethostname().into_string().expect("Failed to get hostname");
     let process_id = process::id();
@@ -15,7 +13,7 @@ pub async fn get_client() -> Result<RetryClient<Client>, anyhow::Error> {
         .identity(format!("{}@{}", process_id, hostname))
         .build()?;
 
-    let client = server_options.connect(NAMESPACE, None).await?;
+    let client = server_options.connect("default", None).await?;
 
     Ok(client)
 }

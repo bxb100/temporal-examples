@@ -1,7 +1,7 @@
 use crate::activities::greet;
 use crate::workflows::example;
 use anyhow::Result;
-use helper::clients::get_client;
+use helper::client::get_client;
 use std::sync::Arc;
 use temporal_sdk::Worker;
 use temporal_sdk_core::api::telemetry::TelemetryOptionsBuilder;
