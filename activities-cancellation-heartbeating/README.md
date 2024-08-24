@@ -1,1 +1,1 @@
-see https://github.com/cosm-public/temporal-samples-rust/tree/main/activities-cancellation-heartbeating
+it should like ts version, but not same, it should be some mistake I don't know yet.

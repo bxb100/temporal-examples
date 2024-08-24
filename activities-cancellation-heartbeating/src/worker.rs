@@ -14,26 +14,20 @@ pub async fn start_worker() -> Result<(), Box<dyn std::error::Error>> {
 
     let worker_config = WorkerConfigBuilder::default()
         .namespace("default")
-        .task_queue("activities-cancellation-heartbeating")
+        .task_queue("cancellation-heartbeating")
         .worker_build_id("core-worker")
         .build()?;
 
     let core_worker = init_worker(&runtime, worker_config, client)?;
 
-    let mut worker = Worker::new_from_core(
-        Arc::new(core_worker),
-        "activities-cancellation-heartbeating",
-    );
-
-    worker.register_activity("fake_progress_activity", activities::fake_progress);
-    worker.register_activity("skipped_activity", activities::skipped_activity);
-    worker.register_activity("cleanup_activity", activities::cleanup_activity);
+    let mut worker = Worker::new_from_core(Arc::new(core_worker), "cancellation-heartbeating");
+    worker.register_activity("fake_progress", activities::fake_progress);
 
     worker.register_wf(
         "run_cancellable_activity",
         workflows::run_cancellable_activity,
     );
-
+    
     worker.run().await?;
 
     Ok(())
