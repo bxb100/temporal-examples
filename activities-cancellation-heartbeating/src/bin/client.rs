@@ -1,5 +1,6 @@
 use helper::get_client;
 use log::{info, warn};
+use std::borrow::Cow;
 use std::time::Duration;
 use temporal_client::{WfClientExt, WorkflowExecutionResult, WorkflowOptions};
 use temporal_sdk_core::protos::coresdk::AsJsonPayloadExt;
@@ -44,7 +45,7 @@ async fn main() -> anyhow::Result<()> {
         .await?;
 
     info!("Cancelled workflow successfully, {:?}", cancel_handle);
-    
+
     match client
         .get_untyped_workflow_handle(workflow_id, handle.run_id)
         .get_workflow_result(Default::default())
@@ -57,7 +58,7 @@ async fn main() -> anyhow::Result<()> {
             warn!("Workflow failed with failure: {:?}", failure);
         }
         ext => {
-           info!("Result: {:?}", ext); 
+            info!("Result: {:?}", ext);
         }
     };
 

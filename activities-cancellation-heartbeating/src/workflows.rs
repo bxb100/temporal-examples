@@ -23,8 +23,7 @@ pub async fn run_cancellable_activity(ctx: WfContext) -> WorkflowResult<u64> {
 
     let exit = tokio::select!(
         _ = cancel_handle => {
-            info!("Workflow cancelled along with its activity");
-            let _ = &fake_progress_handle.cancel(&ctx);
+            info!("Workflow cancelled");
             WfExitValue::Cancelled
         },
         res = &mut fake_progress_handle => {
@@ -35,8 +34,11 @@ pub async fn run_cancellable_activity(ctx: WfContext) -> WorkflowResult<u64> {
         }
     );
 
+    // wait for the activity complete, and update the activity FSM status
     if let WfExitValue::Cancelled = exit {
-        // wait for the activity to be cancelled
+        let _ = fake_progress_handle.cancel(&ctx);
+        // No need FuseFuture;
+        // Is the correct way to use after `select!`?
         fake_progress_handle.await;
     }
 
