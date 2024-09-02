@@ -4,8 +4,8 @@ use temporal_sdk_core::{init_worker, CoreRuntime};
 use temporal_sdk_core_api::{telemetry::TelemetryOptionsBuilder, worker::WorkerConfigBuilder};
 
 use crate::activities;
-use crate::activities::fake_progress;
 use crate::workflows;
+use helper::get_type_name;
 
 pub async fn start_worker() -> Result<(), Box<dyn std::error::Error>> {
     let client = helper::get_client().await?;
@@ -23,7 +23,7 @@ pub async fn start_worker() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut worker = Worker::new_from_core(Arc::new(core_worker), "cancellation-heartbeating");
     worker.register_activity(
-        helper::get_type_name(fake_progress),
+        get_type_name(activities::fake_progress),
         activities::fake_progress,
     );
 

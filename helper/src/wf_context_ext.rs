@@ -1,3 +1,4 @@
+use crate::TypeName;
 use std::time::Duration;
 use temporal_sdk::{ActivityOptions, CancellableFuture, WfContext};
 use temporal_sdk_core::protos::coresdk::activity_result::ActivityResolution;
@@ -31,19 +32,19 @@ impl WfContextExt for WfContext {
         options: ProxyActivityOptions,
     ) -> Box<dyn FnOnce(Payload) -> Box<dyn CancellableFuture<ActivityResolution> + Send> + 'a>
     {
-        let name = std::any::type_name::<T>();
+        let name = T::get_type_name();
         Box::new(move |input: Payload| {
             Box::new(self.activity(ActivityOptions {
                 activity_type: name.to_string(),
                 input,
-                activity_id: options.activity_id.clone(),
-                task_queue: options.task_queue.clone(),
+                activity_id: options.activity_id,
+                task_queue: options.task_queue,
                 schedule_to_start_timeout: options.schedule_to_start_timeout,
                 start_to_close_timeout: options.start_to_close_timeout,
                 schedule_to_close_timeout: options.schedule_to_close_timeout,
                 heartbeat_timeout: options.heartbeat_timeout,
                 cancellation_type: options.cancellation_type,
-                retry_policy: options.retry_policy.clone(),
+                retry_policy: options.retry_policy,
             }))
         })
     }
