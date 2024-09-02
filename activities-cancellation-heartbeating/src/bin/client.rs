@@ -1,6 +1,5 @@
 use helper::get_client;
 use log::{info, warn};
-use std::borrow::Cow;
 use std::time::Duration;
 use temporal_client::{WfClientExt, WorkflowExecutionResult, WorkflowOptions};
 use temporal_sdk_core::protos::coresdk::AsJsonPayloadExt;
