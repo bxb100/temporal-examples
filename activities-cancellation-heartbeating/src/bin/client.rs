@@ -1,4 +1,4 @@
-use helper::get_client;
+use helper::{get_client, get_workflow_result};
 use log::{info, warn};
 use std::time::Duration;
 use temporal_client::{WfClientExt, WorkflowExecutionResult, WorkflowOptions};
@@ -45,21 +45,11 @@ async fn main() -> anyhow::Result<()> {
 
     info!("Cancelled workflow successfully, {:?}", cancel_handle);
 
-    match client
-        .get_untyped_workflow_handle(workflow_id, handle.run_id)
-        .get_workflow_result(Default::default())
-        .await?
-    {
-        WorkflowExecutionResult::Cancelled(_) => {
-            warn!("Workflow was cancelled");
+    match get_workflow_result(&client, workflow_id, handle.run_id).await {
+        Ok(res) => {
+            info!("Result: {:?}", res);
         }
-        WorkflowExecutionResult::Failed(failure) => {
-            warn!("Workflow failed with failure: {:?}", failure);
-        }
-        ext => {
-            info!("Result: {:?}", ext);
-        }
-    };
-
+        _ => {}
+    }
     Ok(())
 }
