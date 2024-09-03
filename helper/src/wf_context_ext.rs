@@ -1,4 +1,5 @@
 use crate::TypeName;
+use core::pin::Pin;
 use std::time::Duration;
 use temporal_sdk::{ActivityOptions, CancellableFuture, WfContext};
 use temporal_sdk_core::protos::coresdk::activity_result::ActivityResolution;
@@ -22,7 +23,7 @@ pub trait WfContextExt {
         self: &'a Self,
         _: T,
         options: ProxyActivityOptions,
-    ) -> Box<dyn FnOnce(Payload) -> Box<dyn CancellableFuture<ActivityResolution> + Send> + 'a>;
+    ) -> Box<dyn FnOnce(Payload) -> Pin<Box<dyn CancellableFuture<ActivityResolution> + Send>> + 'a>;
 }
 
 impl WfContextExt for WfContext {
@@ -30,11 +31,11 @@ impl WfContextExt for WfContext {
         self: &'a Self,
         _: T,
         options: ProxyActivityOptions,
-    ) -> Box<dyn FnOnce(Payload) -> Box<dyn CancellableFuture<ActivityResolution> + Send> + 'a>
+    ) -> Box<dyn FnOnce(Payload) -> Pin<Box<dyn CancellableFuture<ActivityResolution> + Send>> + 'a>
     {
         let name = T::get_type_name();
         Box::new(move |input: Payload| {
-            Box::new(self.activity(ActivityOptions {
+            Box::pin(self.activity(ActivityOptions {
                 activity_type: name.to_string(),
                 input,
                 activity_id: options.activity_id,

@@ -19,7 +19,7 @@ pub async fn run_cancellable_activity(ctx: WfContext) -> WorkflowResult<u64> {
         },
     );
 
-    let mut fake_progress_handle = Box::into_pin(fake_progress(1000u64.as_json_payload()?));
+    let mut fake_progress_handle = fake_progress(1000u64.as_json_payload()?);
 
     let cancel_handle = ctx.cancelled();
 

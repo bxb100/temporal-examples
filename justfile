@@ -2,9 +2,14 @@
 
 set dotenv-load
 
-default := invocation_directory()
+path := invocation_directory()
 
+alias c:=client
 alias server:=worker
+alias s:=worker
+
+default:
+  @echo {{path}}
 
 @fmt:
   cargo fmt --check
@@ -12,8 +17,12 @@ alias server:=worker
 @temporal:
   temporal server start-dev
 
-@worker crate=default:
-  cargo run --manifest-path {{crate}}/Cargo.toml --bin main
+# Run the server
+[no-cd]
+@worker:
+  cargo run --bin main
 
-@client crate=default:
-  cargo run --manifest-path {{crate}}/Cargo.toml --bin client
+# Run the client
+[no-cd]
+@client:
+  cargo run --bin client
