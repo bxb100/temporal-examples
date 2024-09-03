@@ -4,7 +4,7 @@ pub mod parse_activity_result;
 pub mod wf_context_ext;
 
 pub use client::get_client;
-pub use get_workflow_result::get_workflow_result;
+pub use get_workflow_result::get_workflow_first_result;
 pub use parse_activity_result::parse_activity_result;
 use temporal_sdk_core::protos::temporal::api::common::v1::Payload;
 
@@ -22,7 +22,7 @@ impl<T> TypeName for T {
     }
 }
 
-pub fn payload_deserialize<'a, T>(payload: &'a Payload) -> serde_json::Result<T>
+pub fn payload_into<'a, T>(payload: &'a Payload) -> serde_json::Result<T>
 where
     T: serde::de::Deserialize<'a>,
 {

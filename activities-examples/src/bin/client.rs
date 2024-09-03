@@ -1,4 +1,4 @@
-use helper::{get_client, get_workflow_result, payload_deserialize};
+use helper::{get_client, get_workflow_first_result};
 use log::info;
 use nanoid::nanoid;
 use temporal_client::{WorkflowClientTrait, WorkflowOptions};
@@ -38,16 +38,12 @@ async fn main() -> anyhow::Result<()> {
 
     let (f, s) = join!(handle1, handle2);
 
-    if let Ok(r) = get_workflow_result(&client, workflow_id1, f?.run_id).await {
-        for p in r {
-            info!("http_workflow result: {:?}", payload_deserialize::<String>(&p)?);
-        }
+    if let Ok(r) = get_workflow_first_result::<String>(&client, workflow_id1, f?.run_id).await {
+        info!("http_workflow result: {:?}", r);
     };
 
-    if let Ok(r) = get_workflow_result(&client, workflow_id2, s?.run_id).await {
-        for p in r {
-            info!("async_activity_workflow result: {:?}", payload_deserialize::<String>(&p)?);
-        }
+    if let Ok(r) = get_workflow_first_result::<String>(&client, workflow_id2, s?.run_id).await {
+        info!("async_activity_workflow result: {:?}", r);
     };
 
     Ok(())
