@@ -8,17 +8,17 @@ pub use get_workflow_result::get_workflow_first_result;
 pub use parse_activity_result::parse_activity_result;
 use temporal_sdk_core::protos::temporal::api::common::v1::Payload;
 
-pub fn get_type_name<T>(t: T) -> (String, T) {
+pub fn get_type_name<T>(t: T) -> (&'static str, T) {
     (T::get_type_name(), t)
 }
 
 pub trait TypeName {
-    fn get_type_name() -> String;
+    fn get_type_name() -> &'static str;
 }
 
-impl<T> TypeName for T {
-    fn get_type_name() -> String {
-        std::any::type_name::<T>().to_string()
+impl<T: ?Sized> TypeName for T {
+    fn get_type_name() -> &'static str {
+        std::any::type_name::<T>()
     }
 }
 
