@@ -302,6 +302,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+name = "child-workflows"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "dotenv",
+ "env_logger",
+ "helper",
+ "log",
+ "nanoid",
+ "temporal-client",
+ "temporal-sdk",
+ "temporal-sdk-core",
+ "temporal-sdk-core-protos",
+ "tokio",
+]
+
+[[package]]
 name = "chrono"
 version = "0.4.38"
 source = "registry+https://github.com/rust-lang/crates.io-index"
