@@ -1,6 +1,8 @@
+use anyhow::anyhow;
 use temporal_client::{WfClientExt, WorkflowExecutionResult};
+use temporal_sdk_core::protos::temporal::api::common::v1::{Payload, Payloads};
 
-pub async fn get_workflow_first_result<T>(
+pub async fn get_workflow_result<T>(
     client: &impl WfClientExt,
     workflow_id: String,
     run_id: String,
@@ -14,10 +16,8 @@ where
         .await?
     {
         WorkflowExecutionResult::Succeeded(res) => {
-            if let Some(p) = res.first() {
-                return Ok(serde_json::from_slice(&p.data)?);
-            }
-            unreachable!()
+            let p = Payload::try_from(Payloads { payloads: res }).map_err(|e| anyhow!("{}", e))?;
+            Ok(serde_json::from_slice(&p.data)?)
         }
         tmp @ _ => {
             log::info!("Result: {:?}", tmp);

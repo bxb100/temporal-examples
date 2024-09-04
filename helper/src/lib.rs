@@ -2,9 +2,10 @@ pub mod client;
 mod get_workflow_result;
 pub mod parse_activity_result;
 pub mod wf_context_ext;
+pub mod activity_input;
 
 pub use client::get_client;
-pub use get_workflow_result::get_workflow_first_result;
+pub use get_workflow_result::get_workflow_result;
 pub use parse_activity_result::parse_activity_result;
 use temporal_sdk_core::protos::temporal::api::common::v1::Payload;
 

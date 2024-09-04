@@ -1,15 +1,24 @@
-use anyhow::anyhow;
+use helper::activity_input::ActivityInput;
 use log::info;
 use serde::Deserialize;
-use std::collections::HashMap;
 use temporal_sdk::{ActContext, ActivityError};
 
 #[derive(Deserialize, Debug)]
 struct Response {
-    args: HashMap<String, String>,
+    args: Args,
 }
 
-pub async fn make_http_request(_ctx: ActContext, _input: String) -> Result<String, ActivityError> {
+#[derive(Deserialize, Debug)]
+struct Args {
+    answer: String,
+}
+
+pub async fn make_http_request(
+    _ctx: ActContext,
+    _input: ActivityInput<String>,
+) -> Result<String, ActivityError> {
+    info!("{:?}", _input);
+
     let res = reqwest::get("https://httpbin.org/get?answer=42")
         .await?
         .json::<Response>()
@@ -17,8 +26,5 @@ pub async fn make_http_request(_ctx: ActContext, _input: String) -> Result<Strin
 
     info!("Got response: {:?}", res);
 
-    match res.args.get("answer") {
-        None => Err(anyhow!("No answer found").into()),
-        Some(answer) => Ok(answer.to_owned()),
-    }
+    Ok(res.args.answer)
 }

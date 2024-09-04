@@ -855,6 +855,7 @@ dependencies = [
  "temporal-client",
  "temporal-sdk",
  "temporal-sdk-core",
+ "temporal-sdk-core-protos",
  "uuid",
 ]
 

@@ -1,4 +1,4 @@
-use helper::{get_client, get_workflow_first_result};
+use helper::{get_client, get_workflow_result};
 use log::info;
 use nanoid::nanoid;
 use temporal_client::{WorkflowClientTrait, WorkflowOptions};
@@ -38,12 +38,14 @@ async fn main() -> anyhow::Result<()> {
 
     let (f, s) = join!(handle1, handle2);
 
-    if let Ok(r) = get_workflow_first_result::<String>(&client, workflow_id1, f?.run_id).await {
-        info!("http_workflow result: {:?}", r);
+    if let Ok(r) = get_workflow_result::<String>(&client, workflow_id1, f?.run_id).await {
+        assert_eq!(r, "The answer is 42");
+        info!("{} {} {r}", line!(), column!());
     };
 
-    if let Ok(r) = get_workflow_first_result::<String>(&client, workflow_id2, s?.run_id).await {
-        info!("async_activity_workflow result: {:?}", r);
+    if let Ok(r) = get_workflow_result::<String>(&client, workflow_id2, s?.run_id).await {
+        assert_eq!(r, "The Peon says: Job's done!");
+        info!("{} {} {r}", line!(), column!());
     };
 
     Ok(())

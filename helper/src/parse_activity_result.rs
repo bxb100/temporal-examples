@@ -4,12 +4,18 @@ use temporal_sdk_core::protos::coresdk::activity_result::{
     activity_resolution::Status::Completed, ActivityResolution,
 };
 
-pub fn parse_activity_result<'a, T>(result: &'a ActivityResolution) -> Result<T, anyhow::Error>
-where
-    T: serde::Deserialize<'a>,
-{
-    if result.completed_ok() {
-        if let Some(Completed(result)) = &result.status {
+pub trait ActivityResolutionExt {
+    fn parse_result<'a, T>(&'a self) -> Result<T, anyhow::Error>
+    where
+        T: serde::Deserialize<'a>;
+}
+
+impl ActivityResolutionExt for ActivityResolution {
+    fn parse_result<'a, T>(&'a self) -> Result<T, anyhow::Error>
+    where
+        T: serde::Deserialize<'a>,
+    {
+        if let Some(Completed(result)) = &self.status {
             if let Some(payload) = &result.result {
                 // let data = from_utf8(&payload.data).unwrap();
                 let result: T = serde_json::from_slice(&payload.data)?;
@@ -17,8 +23,15 @@ where
                 return Ok(result);
             }
         } else {
-            debug!("Activity failed with {:?}", result.status);
+            debug!("Activity failed with {:?}", self.status);
         }
+        Err(anyhow::anyhow!("Activity failed"))
     }
-    Err(anyhow::anyhow!("Activity failed"))
+}
+
+pub fn parse_activity_result<'a, T>(result: &'a ActivityResolution) -> Result<T, anyhow::Error>
+where
+    T: serde::Deserialize<'a>,
+{
+    result.parse_result()
 }

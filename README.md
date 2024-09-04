@@ -16,3 +16,9 @@ from [temporalio/samples-typescript](https://github.com/temporalio/samples-types
 
 - https://github.com/cosm-public/temporal-samples-rust
 - https://github.com/temporalio/sdk-core
+
+
+## TODO
+
+- Using [inventory](https://github.com/dtolnay/inventory) to mock threadLocal activity context inject
+- Using proc-macros to remove boilerplate code

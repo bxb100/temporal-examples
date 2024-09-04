@@ -1,4 +1,4 @@
-use helper::get_client;
+use helper::{activity_input::ActivityInput, get_client};
 use log::info;
 use std::time::Duration;
 use temporal_client::WorkflowClientTrait;
@@ -9,7 +9,7 @@ use tokio::time::timeout;
 
 pub async fn do_something_async(
     ctx: ActContext,
-    _input: String,
+    _input: ActivityInput<String>,
 ) -> Result<ActExitValue<()>, ActivityError> {
     let task_token = ctx.get_info().task_token.to_vec();
 
