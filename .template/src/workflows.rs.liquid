@@ -6,7 +6,6 @@ use std::time::Duration;
 use temporal_sdk::{WfContext, WfExitValue, WorkflowResult};
 use temporal_sdk_core::protos::coresdk::{AsJsonPayloadExt, FromJsonPayloadExt};
 
-/// A workflow that simply calls an activity
 pub async fn example(ctx: WfContext) -> WorkflowResult<String> {
     let args = ctx.get_args();
 

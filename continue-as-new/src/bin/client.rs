@@ -15,9 +15,9 @@ async fn main() -> anyhow::Result<()> {
     let _handle = client
         .start_workflow(
             vec![0u32.as_json_payload()?],
-            "continue-as-new".to_string(), // task queue
-            workflow_id.to_owned(),        // workflow id
-            "looping_workflow".to_string(),   // workflow type
+            "continue-as-new".to_string(),  // task queue
+            workflow_id.to_owned(),         // workflow id
+            "looping_workflow".to_string(), // workflow type
             None,
             WorkflowOptions::default(),
         )

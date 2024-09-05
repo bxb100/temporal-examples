@@ -19,7 +19,7 @@ pub async fn start_worker() -> Result<(), Box<dyn std::error::Error>> {
 
     let core_worker = init_worker(core_runtime(), worker_config, client)?;
     let mut worker = Worker::new_from_core(Arc::new(core_worker), "cancellation-heartbeating");
-    
+
     worker
         .register_act(activities::fake_progress)
         .register_workflow(

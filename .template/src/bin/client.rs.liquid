@@ -3,8 +3,8 @@ use helper::client::get_client;
 use helper::client_ext::ClientExt;
 use log::info;
 use nanoid::nanoid;
-use temporal_client::{WorkflowClientTrait, WorkflowOptions};
-use temporal_sdk_core::protos::coresdk::AsJsonPayloadExt;
+use temporal_client::{WfClientExt, WorkflowClientTrait, WorkflowExecutionResult, WorkflowOptions};
+use temporal_sdk_core::protos::coresdk::{AsJsonPayloadExt, FromJsonPayloadExt};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -18,9 +18,9 @@ async fn main() -> Result<()> {
     let handle = client
         .start_workflow(
             vec!["Temporal".as_json_payload()?],
-            "hello-world".to_string(), // task queue
-            workflow_id.to_owned(),    // workflow id
-            "example".to_string(),     // workflow type
+            "{{ project-name }}".to_string(), // task queue
+            workflow_id.to_owned(),           // workflow id
+            "example".to_string(),            // workflow type
             None,
             WorkflowOptions::default(),
         )
@@ -36,7 +36,6 @@ async fn main() -> Result<()> {
         .await?;
 
     info!("Result: {}", res);
-    assert_eq!("Hello, Temporal!", res);
 
     Ok(())
 }

@@ -1,4 +1,5 @@
-use helper::{get_client, get_workflow_result};
+use helper::client_ext::ClientExt;
+use helper::get_client;
 use log::info;
 use nanoid::nanoid;
 use temporal_client::{WorkflowClientTrait, WorkflowOptions};
@@ -29,7 +30,10 @@ async fn main() -> anyhow::Result<()> {
         )
         .await?;
 
-    if let Ok(r) = get_workflow_result::<String>(&client, workflow_id, handle.run_id).await {
+    if let Ok(r) = client
+        .get_workflow_result::<String>(workflow_id, handle.run_id)
+        .await
+    {
         assert_eq!(
             r#"I am a child named Alice
 I am a child named Bob

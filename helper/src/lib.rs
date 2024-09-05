@@ -1,15 +1,17 @@
 pub mod activity_input;
 pub mod client;
-mod get_workflow_result;
+pub mod client_ext;
 pub mod parse_activity_result;
 pub mod wf_context_ext;
 pub mod worker_ext;
 
 pub use client::get_client;
-pub use get_workflow_result::get_workflow_result;
 pub use parse_activity_result::parse_activity_result;
+
 use std::sync::OnceLock;
+use temporal_sdk_core::api::telemetry::TelemetryOptionsBuilder;
 use temporal_sdk_core::protos::temporal::api::common::v1::Payload;
+use temporal_sdk_core::CoreRuntime;
 
 pub fn get_type_name<T>(t: T) -> (&'static str, T) {
     (T::get_type_name(), t)
@@ -31,9 +33,6 @@ where
 {
     serde_json::from_slice(&payload.data)
 }
-
-use temporal_sdk_core::api::telemetry::TelemetryOptionsBuilder;
-use temporal_sdk_core::CoreRuntime;
 
 pub fn core_runtime() -> &'static CoreRuntime {
     static CORE_RUNTIME: OnceLock<CoreRuntime> = OnceLock::new();

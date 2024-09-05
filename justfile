@@ -26,3 +26,8 @@ default:
 [no-cd]
 @client crate='client':
   cargo run --bin {{crate}}
+
+@gen project-name project-version='0.1.0':
+  @cargo new {{project-name}}
+  @rm {{project-name}}/src/main.rs
+  @cargo generate -o --init --path ./.template --name {{project-name}} --destination {{project-name}} --define project_version={{project-version}}

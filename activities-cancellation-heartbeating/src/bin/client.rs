@@ -1,4 +1,5 @@
-use helper::{get_client, get_workflow_result};
+use helper::client_ext::ClientExt;
+use helper::get_client;
 use log::info;
 use std::time::Duration;
 use temporal_client::WorkflowOptions;
@@ -45,7 +46,10 @@ async fn main() -> anyhow::Result<()> {
 
     info!("Cancelled workflow successfully, {:?}", cancel_handle);
 
-    match get_workflow_result::<String>(&client, workflow_id, handle.run_id).await {
+    match client
+        .get_workflow_result::<String>(workflow_id, handle.run_id)
+        .await
+    {
         Ok(res) => {
             info!("Result: {:?}", res);
         }

@@ -1,0 +1,21 @@
+[package]
+name = "{{project-name}}"
+version = "{{project_version}}"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+default-run = "main"
+
+[dependencies]
+temporal-sdk.workspace = true
+temporal-client.workspace = true
+temporal-sdk-core.workspace = true
+temporal-sdk-core-protos.workspace = true
+helper.workspace = true
+
+anyhow.workspace = true
+dotenv.workspace = true
+env_logger.workspace = true
+log.workspace = true
+tokio.workspace = true
+nanoid.workspace = true
