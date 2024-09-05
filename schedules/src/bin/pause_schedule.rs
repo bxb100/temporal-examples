@@ -20,8 +20,8 @@ async fn main() -> anyhow::Result<()> {
                 pause: "Pause By Rust SDK".to_string(),
                 ..Default::default()
             }),
-            identity: "pause-client".to_string(),
             request_id: Uuid::new_v4().to_string(),
+            ..Default::default()
         })
         .await?;
 

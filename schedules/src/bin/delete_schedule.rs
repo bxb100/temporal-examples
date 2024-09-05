@@ -14,7 +14,7 @@ async fn main() -> anyhow::Result<()> {
         .delete_schedule(DeleteScheduleRequest {
             namespace: client.namespace().to_string(),
             schedule_id: "sample-schedule".to_string(),
-            identity: "pause-client".to_string(),
+            ..Default::default()
         })
         .await?;
 

@@ -47,7 +47,6 @@ async fn main() -> anyhow::Result<()> {
             schedule_id: schedule_id.to_string(),
             schedule,
             conflict_token: response.conflict_token,
-            identity: "go-faster-client".to_string(),
             request_id: Uuid::new_v4().to_string(),
             ..Default::default()
         })
