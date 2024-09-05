@@ -24,5 +24,5 @@ default:
 
 # Run the client
 [no-cd]
-@client:
-  cargo run --bin client
+@client crate='client':
+  cargo run --bin {{crate}}

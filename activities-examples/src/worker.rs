@@ -1,4 +1,5 @@
-use helper::{core_runtime, get_type_name};
+use helper::core_runtime;
+use helper::worker_ext::WorkerExt;
 use std::sync::Arc;
 use temporal_sdk::Worker;
 use temporal_sdk_core::init_worker;
@@ -13,22 +14,20 @@ pub async fn start_worker() -> Result<(), Box<dyn std::error::Error>> {
     let worker_config = WorkerConfigBuilder::default()
         .namespace("default")
         .task_queue("activities-examples")
-        .worker_build_id("core-worker")
+        .worker_build_id("temporal-examples-rs")
         .build()?;
 
     let core_worker = init_worker(core_runtime(), worker_config, client)?;
 
     let mut worker = Worker::new_from_core(Arc::new(core_worker), "activities-examples");
 
-    let (l, r) = get_type_name(make_http_request);
-    worker.register_activity(l, r);
-    let (l, r) = get_type_name(do_something_async);
-    worker.register_activity(l, r);
-
-    worker.register_wf("http_workflow", http_workflow);
-    worker.register_wf("async_activity_workflow", async_activity_workflow);
-
-    worker.run().await?;
+    worker
+        .register_act(make_http_request)
+        .register_act(do_something_async)
+        .register_workflow("http_workflow", http_workflow)
+        .register_workflow("async_activity_workflow", async_activity_workflow)
+        .run()
+        .await?;
 
     Ok(())
 }

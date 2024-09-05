@@ -2025,6 +2025,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "schedules"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "dotenv",
+ "env_logger",
+ "helper",
+ "log",
+ "nanoid",
+ "prost-wkt-types",
+ "temporal-client",
+ "temporal-sdk",
+ "temporal-sdk-core",
+ "tokio",
+ "uuid",
+]
+
+[[package]]
 name = "scopeguard"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

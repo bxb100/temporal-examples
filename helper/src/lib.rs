@@ -3,6 +3,7 @@ pub mod client;
 mod get_workflow_result;
 pub mod parse_activity_result;
 pub mod wf_context_ext;
+pub mod worker_ext;
 
 pub use client::get_client;
 pub use get_workflow_result::get_workflow_result;
