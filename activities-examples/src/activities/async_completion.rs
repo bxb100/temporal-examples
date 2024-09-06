@@ -1,4 +1,5 @@
 use helper::get_client;
+use helper::util::activity_input::ActivityInput;
 use log::info;
 use std::time::Duration;
 use temporal_client::WorkflowClientTrait;
@@ -6,7 +7,6 @@ use temporal_sdk::{ActContext, ActExitValue, ActivityError};
 use temporal_sdk_core_protos::coresdk::AsJsonPayloadExt;
 use temporal_sdk_core_protos::TaskToken;
 use tokio::time::timeout;
-use helper::util::activity_input::ActivityInput;
 
 pub async fn do_something_async(
     ctx: ActContext,
