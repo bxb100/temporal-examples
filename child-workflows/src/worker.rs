@@ -6,7 +6,7 @@ use temporal_sdk::Worker;
 use temporal_sdk_core::{init_worker, WorkerConfigBuilder};
 
 pub async fn start_worker() -> Result<(), Box<dyn std::error::Error>> {
-    let client = helper::client::get_client().await?;
+    let client = helper::util::client::get_client().await?;
 
     let worker_config = WorkerConfigBuilder::default()
         .namespace("default")

@@ -28,10 +28,3 @@ impl ActivityResolutionExt for ActivityResolution {
         Err(anyhow::anyhow!("Activity failed"))
     }
 }
-
-pub fn parse_activity_result<'a, T>(result: &'a ActivityResolution) -> Result<T, anyhow::Error>
-where
-    T: serde::Deserialize<'a>,
-{
-    result.parse_result()
-}

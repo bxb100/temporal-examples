@@ -1,12 +1,10 @@
-pub mod activity_input;
-pub mod client;
+pub mod activity_resolution_ext;
 pub mod client_ext;
-pub mod parse_activity_result;
+pub mod util;
 pub mod wf_context_ext;
 pub mod worker_ext;
 
-pub use client::get_client;
-pub use parse_activity_result::parse_activity_result;
+pub use util::client::*;
 
 use std::sync::OnceLock;
 use temporal_sdk_core::api::telemetry::TelemetryOptionsBuilder;

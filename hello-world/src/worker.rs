@@ -1,7 +1,7 @@
 use crate::activities::greet;
 use crate::workflows::example;
 use anyhow::Result;
-use helper::client::get_client;
+use helper::util::client::get_client;
 use helper::core_runtime;
 use helper::worker_ext::WorkerExt;
 use std::sync::Arc;

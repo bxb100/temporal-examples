@@ -1,6 +1,6 @@
 use crate::activities::*;
-use helper::activity_input::*;
-use helper::parse_activity_result::ActivityResolutionExt;
+use helper::util::activity_input::*;
+use helper::activity_resolution_ext::ActivityResolutionExt;
 use helper::wf_context_ext::{ProxyActivityOptions, WfContextExt};
 use std::time::Duration;
 use temporal_sdk::{WfContext, WfExitValue, WorkflowResult};

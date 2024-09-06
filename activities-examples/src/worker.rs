@@ -9,7 +9,7 @@ use crate::activities::*;
 use crate::workflows::*;
 
 pub async fn start_worker() -> Result<(), Box<dyn std::error::Error>> {
-    let client = helper::client::get_client().await?;
+    let client = helper::util::client::get_client().await?;
 
     let worker_config = WorkerConfigBuilder::default()
         .namespace("default")

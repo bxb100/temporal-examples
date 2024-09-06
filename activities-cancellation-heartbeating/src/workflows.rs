@@ -1,7 +1,7 @@
 use log::info;
 
 use crate::activities::fake_progress;
-use helper::parse_activity_result;
+use helper::activity_resolution_ext::ActivityResolutionExt;
 use helper::wf_context_ext::*;
 use std::time::Duration;
 use temporal_sdk::{WfContext, WfExitValue, WorkflowResult};
@@ -31,7 +31,7 @@ pub async fn run_cancellable_activity(ctx: WfContext) -> WorkflowResult<u64> {
         res = &mut fake_progress_handle => {
             info!("Activity completed with {:?}", res);
             WfExitValue::Normal(
-                 parse_activity_result(&res)?
+                res.parse_result()?
             )
         }
     );

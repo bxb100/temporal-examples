@@ -1,5 +1,5 @@
 use crate::activities::greet;
-use helper::parse_activity_result::parse_activity_result;
+use helper::activity_resolution_ext::ActivityResolutionExt;
 use helper::wf_context_ext::{ProxyActivityOptions, WfContextExt};
 use log::info;
 use std::time::Duration;
@@ -22,7 +22,7 @@ pub async fn example(ctx: WfContext) -> WorkflowResult<String> {
     )(input.as_json_payload()?)
     .await;
 
-    let v = parse_activity_result::<String>(&resolution)?;
+    let v = resolution.parse_result::<String>()?;
     info!("Activity completed with: {}", v);
     Ok(WfExitValue::Normal(v))
 }
