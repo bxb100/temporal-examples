@@ -1,4 +1,4 @@
-use helper::payload_into;
+use helper::payload_ext::PayloadExt;
 use temporal_sdk::{ChildWorkflowOptions, WfContext, WfExitValue, WorkflowResult};
 use temporal_sdk_core_protos::coresdk::child_workflow::{child_workflow_result::Status, Success};
 
@@ -10,7 +10,7 @@ pub async fn parent_workflow(ctx: WfContext) -> WorkflowResult<String> {
         handlers.push(tokio::spawn(
             ctx.child_workflow(ChildWorkflowOptions {
                 // workflow_id // must be fixed in current scope
-                workflow_id: format!("child-workflow-{}", payload_into::<String>(&p)?),
+                workflow_id: format!("child-workflow-{}", p.deserialize::<String>()?),
                 workflow_type: "child_workflow".to_string(),
                 input: vec![p.clone()],
                 // // regular workflow options apply here, with two additions (defaults shown):
@@ -33,7 +33,7 @@ pub async fn parent_workflow(ctx: WfContext) -> WorkflowResult<String> {
             result: Some(ref payload),
         })) = pending?.into_started().unwrap().result().await.status
         {
-            s.push(helper::payload_into::<String>(payload)?);
+            s.push(payload.deserialize::<String>()?);
         }
     }
 
@@ -41,6 +41,6 @@ pub async fn parent_workflow(ctx: WfContext) -> WorkflowResult<String> {
 }
 
 pub async fn child_workflow(ctx: WfContext) -> WorkflowResult<String> {
-    let name = payload_into::<String>(&ctx.get_args()[0])?;
+    let name = ctx.get_args()[0].deserialize::<String>()?;
     Ok(WfExitValue::Normal(format!("I am a child named {}", name)))
 }

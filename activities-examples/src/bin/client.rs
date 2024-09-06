@@ -1,9 +1,10 @@
-use helper::{get_client, get_workflow_result};
+use helper::get_client;
 use log::info;
 use nanoid::nanoid;
 use temporal_client::{WorkflowClientTrait, WorkflowOptions};
 use temporal_sdk_core_protos::coresdk::AsJsonPayloadExt;
 use tokio::join;
+use helper::client_ext::ClientExt;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -37,13 +38,13 @@ async fn main() -> anyhow::Result<()> {
     );
 
     let (f, s) = join!(handle1, handle2);
-
-    if let Ok(r) = get_workflow_result::<String>(&client, workflow_id1, f?.run_id).await {
+    
+    if let Ok(r) = client.get_workflow_result::<String>(workflow_id1, f?.run_id).await {
         assert_eq!(r, "The answer is 42");
         info!("{} {} {r}", line!(), column!());
     };
 
-    if let Ok(r) = get_workflow_result::<String>(&client, workflow_id2, s?.run_id).await {
+    if let Ok(r) = client.get_workflow_result::<String>(workflow_id2, s?.run_id).await {
         assert_eq!(r, "The Peon says: Job's done!");
         info!("{} {} {r}", line!(), column!());
     };

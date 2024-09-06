@@ -1,4 +1,3 @@
-use crate::TypeName;
 use core::pin::Pin;
 use std::time::Duration;
 use temporal_sdk::{ActivityOptions, CancellableFuture, WfContext};
@@ -18,22 +17,17 @@ pub struct ProxyActivityOptions {
     pub retry_policy: Option<RetryPolicy>,
 }
 
+// Send + Unpin is required by temporal sdk
+type PinProxyActivityFuture = Pin<Box<dyn CancellableFuture<ActivityResolution> + Send + Unpin>>;
+type ProxyActivityFn<'a> = Box<dyn FnOnce(Payload) -> PinProxyActivityFuture + 'a>;
+
 pub trait WfContextExt {
-    fn proxy_activity<'a, T>(
-        self: &'a Self,
-        _: T,
-        options: ProxyActivityOptions,
-    ) -> Box<dyn FnOnce(Payload) -> Pin<Box<dyn CancellableFuture<ActivityResolution> + Send>> + 'a>;
+    fn proxy_activity<T>(self: &Self, _: T, options: ProxyActivityOptions) -> ProxyActivityFn;
 }
 
 impl WfContextExt for WfContext {
-    fn proxy_activity<'a, T>(
-        self: &'a Self,
-        _: T,
-        options: ProxyActivityOptions,
-    ) -> Box<dyn FnOnce(Payload) -> Pin<Box<dyn CancellableFuture<ActivityResolution> + Send>> + 'a>
-    {
-        let name = T::get_type_name();
+    fn proxy_activity<T>(self: &Self, _: T, options: ProxyActivityOptions) -> ProxyActivityFn {
+        let name = std::any::type_name::<T>();
         Box::new(move |input: Payload| {
             Box::pin(self.activity(ActivityOptions {
                 activity_type: name.to_string(),

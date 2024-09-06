@@ -1,4 +1,4 @@
-use helper::payload_into;
+use helper::payload_ext::PayloadExt;
 use log::info;
 use std::time::Duration;
 use temporal_sdk::{WfContext, WfExitValue, WorkflowResult};
@@ -6,7 +6,7 @@ use temporal_sdk_core_protos::coresdk::workflow_commands::ContinueAsNewWorkflowE
 use temporal_sdk_core_protos::coresdk::AsJsonPayloadExt;
 
 pub async fn looping_workflow(ctx: WfContext) -> WorkflowResult<()> {
-    let iteration = payload_into::<u32>(&ctx.get_args()[0])?;
+    let iteration = ctx.get_args()[0].deserialize::<u32>()?;
     if iteration >= 10 {
         return Ok(WfExitValue::Normal(()));
     }

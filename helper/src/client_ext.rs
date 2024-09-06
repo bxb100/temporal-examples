@@ -1,3 +1,4 @@
+use crate::payload_ext::PayloadExt;
 use anyhow::anyhow;
 use core::future::Future;
 use serde::de::DeserializeOwned;
@@ -35,7 +36,7 @@ where
                 WorkflowExecutionResult::Succeeded(res) => {
                     let p = Payload::try_from(Payloads { payloads: res })
                         .map_err(|e| anyhow!("{}", e))?;
-                    Ok(serde_json::from_slice(&p.data)?)
+                    Ok(p.deserialize()?)
                 }
                 tmp @ _ => {
                     log::info!("Result: {:?}", tmp);
