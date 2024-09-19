@@ -37,7 +37,7 @@ async fn main() -> anyhow::Result<()> {
         .await?;
 
     info!(
-        "Added Search Attributes: {:?} to Temporal Server",
+        "Added Search Attributes: \n{:#?} to Temporal Server",
         search_attributes
     );
 

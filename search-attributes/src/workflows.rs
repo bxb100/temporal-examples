@@ -1,5 +1,6 @@
 use crate::SearchAttributesWrapper;
 use helper::payload_ext::PayloadExt;
+use std::collections::BTreeMap;
 use temporal_sdk::{WfContext, WfExitValue, WorkflowResult};
 use temporal_sdk_core::protos::coresdk::AsJsonPayloadExt;
 
@@ -32,10 +33,8 @@ pub async fn example(ctx: WfContext) -> WorkflowResult<SearchAttributesWrapper> 
     ];
     ctx.upsert_search_attributes(iter.clone());
 
-    let mut mutation_search_attributes = ctx.search_attributes().indexed_fields.clone();
-    mutation_search_attributes.extend(iter);
+    let mut map = BTreeMap::from(iter);
+    map.extend(search_attributes.indexed_fields.clone());
 
-    Ok(WfExitValue::Normal(SearchAttributesWrapper(
-        mutation_search_attributes,
-    )))
+    Ok(WfExitValue::Normal(SearchAttributesWrapper(map)))
 }

@@ -48,16 +48,17 @@ async fn main() -> Result<()> {
         .search_attributes
         .unwrap()
         .indexed_fields;
+
     info!(
         "searchAttributes at start: {}",
-        serde_json::to_string(&SearchAttributesWrapper(search_attributes))?
+        SearchAttributesWrapper::from(search_attributes)
     );
 
     let res = client
-        .get_workflow_result::<serde_json::Value>(workflow_id, handle.run_id)
+        .get_workflow_result::<SearchAttributesWrapper>(workflow_id, handle.run_id)
         .await?;
 
-    info!("searchAttributes at end: {}", res.to_string());
+    info!("searchAttributes at end: {}", res);
 
     Ok(())
 }

@@ -1,4 +1,3 @@
-use core::pin::Pin;
 use std::time::Duration;
 use temporal_sdk::{ActivityOptions, CancellableFuture, WfContext};
 use temporal_sdk_core::protos::coresdk::activity_result::ActivityResolution;
@@ -17,8 +16,8 @@ pub struct ProxyActivityOptions {
     pub retry_policy: Option<RetryPolicy>,
 }
 
-// Send + Unpin is required by temporal sdk
-type PinProxyActivityFuture = Pin<Box<dyn CancellableFuture<ActivityResolution> + Send + Unpin>>;
+/// see [BoxFuture](temporal_sdk::BoxFuture) , but there are fixed in heap and no self reference, so I think there are no need to Pin
+type PinProxyActivityFuture = Box<dyn CancellableFuture<ActivityResolution> + Send + Unpin + 'static>;
 type ProxyActivityFn<'a> = Box<dyn FnOnce(Payload) -> PinProxyActivityFuture + 'a>;
 
 pub trait WfContextExt {
@@ -29,7 +28,7 @@ impl WfContextExt for WfContext {
     fn proxy_activity<T>(self: &Self, _: T, options: ProxyActivityOptions) -> ProxyActivityFn {
         let name = std::any::type_name::<T>();
         Box::new(move |input: Payload| {
-            Box::pin(self.activity(ActivityOptions {
+            Box::new(self.activity(ActivityOptions {
                 activity_type: name.to_string(),
                 input,
                 activity_id: options.activity_id,
