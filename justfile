@@ -38,25 +38,26 @@ default:
 # run a dev temporal server
 [group('dev-server-cli')]
 @temporal:
-  temporal server start-dev
+  temporal server start-dev --ui-port 8080
 
 # up the docker compose with postgresql and elasticsearch
 [group('dev-server-docker')]
 up:
   #!/usr/bin/env sh
   cd {{source_directory()}}/docker-compose
-  docker compose --file docker-compose.yml up -d
+  docker compose -f docker-compose.yml up -d
+  open -u http://localhost:8080
 
 # down the docker compose
 [group('dev-server-docker')]
 down:
   #!/usr/bin/env sh
   cd {{source_directory()}}/docker-compose
-  docker compose --file docker-compose.yml down
+  docker compose -f docker-compose.yml down -v
 
 # stop the docker compose
 [group('dev-server-docker')]
 stop:
   #!/usr/bin/env sh
   cd {{source_directory()}}/docker-compose
-  docker compose --file docker-compose.yml stop
+  docker compose -f docker-compose.yml stop
