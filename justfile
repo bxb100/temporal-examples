@@ -11,31 +11,52 @@ alias f:=fmt
 default:
   @echo {{path}}
 
-# Cargo fmt
+# cargo fmt
 [group('dev')]
 @fmt:
-  cargo fmt
+  cargo fmt --check
 
-# Run a dev temporal server
-[group('run')]
-@temporal:
-  temporal server start-dev
-
-# Run the server
+# run the server
 [group('run')]
 [no-cd]
 @worker:
   cargo run --bin main
 
-# Run the client
+# run the client
 [group('run')]
 [no-cd]
 @client crate='client':
   cargo run --bin {{crate}}
 
-# Generate a new project using hello-world structure.
+# generate a new project using hello-world structure
 [group('dev')]
 @gen project-name project-version='0.1.0':
   cargo new {{project-name}}
   rm {{project-name}}/src/main.rs
   cargo generate -o --init --path {{justfile_directory()}}/.template --name {{project-name}} --destination {{project-name}} --define project_version={{project-version}}
+
+# run a dev temporal server
+[group('dev-server-cli')]
+@temporal:
+  temporal server start-dev
+
+# up the docker compose with postgresql and elasticsearch
+[group('dev-server-docker')]
+up:
+  #!/usr/bin/env sh
+  cd {{source_directory()}}/docker-compose
+  docker compose --file docker-compose.yml up -d
+
+# down the docker compose
+[group('dev-server-docker')]
+down:
+  #!/usr/bin/env sh
+  cd {{source_directory()}}/docker-compose
+  docker compose --file docker-compose.yml down
+
+# stop the docker compose
+[group('dev-server-docker')]
+stop:
+  #!/usr/bin/env sh
+  cd {{source_directory()}}/docker-compose
+  docker compose --file docker-compose.yml stop

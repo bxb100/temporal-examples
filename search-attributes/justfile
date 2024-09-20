@@ -2,20 +2,12 @@ import '../justfile'
 
 set allow-duplicate-recipes
 
-# Set custom search attributes need server with elasticsearch
-[group('run')]
-temporal:
-  #!/usr/bin/env sh
-  cd ../docker-compose
-  docker compose --file docker-compose.yml up -d
-  
-[group('run')]
-down:
-  #!/usr/bin/env sh
-  cd ../docker-compose
-  docker compose --file docker-compose.yml down
+# alias for `up`
+[group('dev-server-docker')]
+@temporal:
+  just up
 
-# Add custom search attributes
+# add custom search attributes
 [group('run')]
 @add:
   cargo run --bin client_operator_serivce
