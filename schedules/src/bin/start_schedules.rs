@@ -1,7 +1,7 @@
+use chrono::Duration;
 use helper::get_client;
 use log::info;
 use nanoid::nanoid;
-use prost_wkt_types::Duration;
 use temporal_client::{WorkflowClientTrait, WorkflowService};
 use temporal_sdk_core::protos::coresdk::AsJsonPayloadExt;
 use temporal_sdk_core::protos::temporal::api::common::v1::{Payloads, WorkflowType};
@@ -32,10 +32,7 @@ async fn main() -> anyhow::Result<()> {
                 spec: Some(ScheduleSpec {
                     interval: vec![
                         IntervalSpec {
-                            interval: Some(Duration {
-                                seconds: 10,
-                                nanos: 0,
-                            }),
+                            interval: Some(Duration::seconds(10).into()),
                             phase: None
                         }
                     ],
@@ -59,10 +56,7 @@ async fn main() -> anyhow::Result<()> {
                 }),
                 policies: Some(SchedulePolicies {
                     overlap_policy: ScheduleOverlapPolicy::AllowAll as i32,
-                    catchup_window: Some(Duration {
-                        seconds: 60 * 60 * 24, // 1 day
-                        nanos: 0
-                    }),
+                    catchup_window: Some(Duration::days(1).into()),
                     ..Default::default()
                 }),
                 state: None

@@ -1,6 +1,6 @@
+use chrono::Duration;
 use helper::get_client;
 use log::info;
-use prost_wkt_types::Duration;
 use temporal_client::{WorkflowClientTrait, WorkflowService};
 use temporal_sdk_core::protos::temporal::api::schedule::v1::{IntervalSpec, Schedule};
 use temporal_sdk_core::protos::temporal::api::workflowservice::v1::{
@@ -33,10 +33,7 @@ async fn main() -> anyhow::Result<()> {
     }) = schedule
     {
         spec.interval = vec![IntervalSpec {
-            interval: Some(Duration {
-                seconds: 5,
-                nanos: 0,
-            }),
+            interval: Some(Duration::seconds(5).into()),
             phase: None,
         }];
     }

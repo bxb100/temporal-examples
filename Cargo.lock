@@ -2073,12 +2073,12 @@ name = "schedules"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "chrono",
  "dotenv",
  "env_logger",
  "helper",
  "log",
  "nanoid",
- "prost-wkt-types",
  "temporal-client",
  "temporal-sdk",
  "temporal-sdk-core",

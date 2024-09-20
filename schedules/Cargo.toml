@@ -39,7 +39,7 @@ log.workspace = true
 tokio.workspace = true
 nanoid.workspace = true
 uuid.workspace = true
-prost-wkt-types.workspace = true
+chrono.workspace = true
 
 [lints]
 workspace = true
