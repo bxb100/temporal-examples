@@ -1,17 +1,20 @@
 use serde::Deserialize;
+use temporal_sdk_core_protos::coresdk::FromJsonPayloadExt;
 use temporal_sdk_core_protos::temporal::api::common::v1::Payload;
 
 pub trait PayloadExt {
-    fn deserialize<'a, T>(&'a self) -> serde_json::Result<T>
+    /// see [FromJsonPayloadExt::from_json_payload](FromJsonPayloadExt::from_json_payload)
+    fn deserialize<T>(&self) -> anyhow::Result<T>
     where
-        T: serde::de::Deserialize<'a>;
+        T: for<'de> serde::de::Deserialize<'de>;
 }
 
 impl PayloadExt for Payload {
-    fn deserialize<'a, T>(&'a self) -> serde_json::Result<T>
+    fn deserialize<T>(&self) -> anyhow::Result<T>
     where
-        T: Deserialize<'a>,
+        T: for<'de> Deserialize<'de>,
     {
-        serde_json::from_slice(&self.data)
+        // serde_json::from_slice(&self.data)
+        Ok(T::from_json_payload(self)?)
     }
 }

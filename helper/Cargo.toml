@@ -14,7 +14,6 @@ temporal-sdk-core-api.workspace = true
 temporal-sdk-core-protos.workspace = true
 
 anyhow.workspace = true
-log.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 uuid = { version = "1.10.0", features = ["v4"] }

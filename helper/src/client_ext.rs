@@ -38,10 +38,7 @@ where
                         .map_err(|e| anyhow!("{}", e))?;
                     Ok(p.deserialize()?)
                 }
-                tmp @ _ => {
-                    log::info!("Result: {:?}", tmp);
-                    Err(anyhow::anyhow!("Workflow did not succeed"))
-                }
+                other => Err(anyhow::anyhow!("Workflow did not succeed {:?}", other)),
             }
         }
     }

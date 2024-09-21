@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "activities-cancellation-heartbeating", "activities-examples", "child-workflows", "continue-as-new", "hello-world", "helper", "schedules", "search-attributes",
+    "activities-cancellation-heartbeating", "activities-examples", "child-workflows", "continue-as-new", "custom-logger", "hello-world", "helper", "schedules", "search-attributes",
 ]
 exclude = [
     "sdk-core" # exclude the submodule
@@ -38,6 +38,8 @@ reqwest = "0.12"
 prost-wkt-types = "0.6"
 uuid = { version = "1.10", features = ["v4"] }
 chrono = { version = "0.4", features = ["serde"]}
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["registry", "env-filter"] }
 
 [workspace.lints.clippy]
 all = { level = "allow", priority = -1 }

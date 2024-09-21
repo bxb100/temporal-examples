@@ -1,0 +1,7 @@
+import '../justfile'
+
+alias s2:=worker2
+
+# this is will enable the custom-logger feature
+@worker2:
+  cargo run --bin main --features custom-logger

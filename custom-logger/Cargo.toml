@@ -1,0 +1,28 @@
+[package]
+name = "custom-logger"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+default-run = "main"
+
+[dependencies]
+temporal-sdk.workspace = true
+temporal-client.workspace = true
+temporal-sdk-core.workspace = true
+temporal-sdk-core-protos.workspace = true
+helper.workspace = true
+
+anyhow.workspace = true
+dotenv.workspace = true
+tokio.workspace = true
+nanoid.workspace = true
+
+tracing.workspace = true
+tracing-subscriber = { workspace = true, features = ["registry", "env-filter"], optional = true }
+tracing-bunyan-formatter = { version = "0.3", optional = true }
+tracing-log = { version = "0.2.0", optional = true }
+
+[features]
+default = []
+custom-logger = ["dep:tracing-subscriber", "dep:tracing-bunyan-formatter", "dep:tracing-log"]
