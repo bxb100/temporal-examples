@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "activities-cancellation-heartbeating", "activities-examples", "child-workflows", "continue-as-new", "custom-logger", "hello-world", "helper", "schedules", "search-attributes",
+    "activities-cancellation-heartbeating", "activities-examples", "child-workflows", "continue-as-new", "custom-logger", "dsl-interpreter", "hello-world", "helper", "schedules", "search-attributes",
 ]
 exclude = [
     "sdk-core" # exclude the submodule
