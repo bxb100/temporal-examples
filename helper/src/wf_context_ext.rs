@@ -17,7 +17,8 @@ pub struct ProxyActivityOptions {
 }
 
 /// see [BoxFuture](temporal_sdk::BoxFuture) , but there are fixed in heap and no self reference, so I think there are no need to Pin
-type PinProxyActivityFuture = Box<dyn CancellableFuture<ActivityResolution> + Send + Unpin + 'static>;
+type PinProxyActivityFuture =
+    Box<dyn CancellableFuture<ActivityResolution> + Send + Unpin + 'static>;
 type ProxyActivityFn<'a> = Box<dyn FnOnce(Payload) -> PinProxyActivityFuture + 'a>;
 
 pub trait WfContextExt {

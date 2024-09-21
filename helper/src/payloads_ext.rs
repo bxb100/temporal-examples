@@ -1,6 +1,6 @@
+use crate::payload_ext::PayloadExt;
 use serde::Deserialize;
 use temporal_sdk_core_protos::temporal::api::common::v1::{Payload, Payloads};
-use crate::payload_ext::PayloadExt;
 
 pub trait PayloadsExt {
     fn first_input<T>(&self) -> Option<T>

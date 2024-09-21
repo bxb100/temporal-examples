@@ -1,6 +1,5 @@
 use chrono::Duration;
 use helper::get_client;
-use log::info;
 use nanoid::nanoid;
 use temporal_client::{WorkflowClientTrait, WorkflowService};
 use temporal_sdk_core::protos::coresdk::AsJsonPayloadExt;
@@ -13,12 +12,12 @@ use temporal_sdk_core::protos::temporal::api::schedule::v1::{
 use temporal_sdk_core::protos::temporal::api::taskqueue::v1::TaskQueue;
 use temporal_sdk_core::protos::temporal::api::workflow::v1::NewWorkflowExecutionInfo;
 use temporal_sdk_core::protos::temporal::api::workflowservice::v1::CreateScheduleRequest;
+use tracing::info;
 use uuid::Uuid;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenv::dotenv().ok();
-    env_logger::init();
 
     let mut client = get_client().await?;
     let workflow_id = format!("workflow-id-{}", nanoid!());

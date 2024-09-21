@@ -1,7 +1,7 @@
 use helper::util::activity_input::ActivityInput;
-use log::info;
 use serde::Deserialize;
 use temporal_sdk::{ActContext, ActivityError};
+use tracing::info;
 
 #[derive(Deserialize, Debug)]
 struct Response {

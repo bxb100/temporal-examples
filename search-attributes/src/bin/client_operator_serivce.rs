@@ -1,14 +1,13 @@
 use helper::util::client::get_client;
-use log::info;
 use std::collections::HashMap;
 use temporal_client::OperatorService;
 use temporal_sdk_core_protos::temporal::api::enums::v1::IndexedValueType;
 use temporal_sdk_core_protos::temporal::api::operatorservice::v1::AddSearchAttributesRequest;
+use tracing::info;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenv::dotenv().ok();
-    env_logger::init();
 
     let mut client = get_client().await?;
 

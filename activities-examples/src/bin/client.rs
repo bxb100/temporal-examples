@@ -1,15 +1,14 @@
 use helper::client_ext::ClientExt;
 use helper::get_client;
-use log::info;
 use nanoid::nanoid;
 use temporal_client::{WorkflowClientTrait, WorkflowOptions};
 use temporal_sdk_core_protos::coresdk::AsJsonPayloadExt;
 use tokio::join;
+use tracing::info;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenv::dotenv().ok();
-    env_logger::init();
 
     let client = get_client().await?;
 

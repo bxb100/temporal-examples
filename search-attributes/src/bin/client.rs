@@ -2,17 +2,16 @@ use anyhow::Result;
 use chrono::Local;
 use helper::client_ext::ClientExt;
 use helper::util::client::get_client;
-use log::info;
 use nanoid::nanoid;
 use search_attributes::SearchAttributesWrapper;
 use std::collections::HashMap;
 use temporal_client::{WorkflowClientTrait, WorkflowOptions};
 use temporal_sdk_core::protos::coresdk::AsJsonPayloadExt;
+use tracing::info;
 
 #[tokio::main]
 async fn main() -> Result<()> {
     dotenv::dotenv().ok();
-    env_logger::init();
 
     let client = get_client().await?;
 

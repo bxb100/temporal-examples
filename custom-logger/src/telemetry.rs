@@ -1,10 +1,10 @@
 use tracing::subscriber::set_global_default;
 use tracing::Subscriber;
 use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
-use tracing_log::LogTracer;
 use tracing_subscriber::fmt::MakeWriter;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::{EnvFilter, Registry};
+use tracing_tracing::LogTracer;
 
 /// code from zero2prod
 pub fn get_subscriber<T: AsRef<str>, Sink>(

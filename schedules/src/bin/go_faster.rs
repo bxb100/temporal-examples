@@ -1,17 +1,16 @@
 use chrono::Duration;
 use helper::get_client;
-use log::info;
 use temporal_client::{WorkflowClientTrait, WorkflowService};
 use temporal_sdk_core::protos::temporal::api::schedule::v1::{IntervalSpec, Schedule};
 use temporal_sdk_core::protos::temporal::api::workflowservice::v1::{
     DescribeScheduleRequest, UpdateScheduleRequest,
 };
+use tracing::info;
 use uuid::Uuid;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenv::dotenv().ok();
-    env_logger::init();
 
     let mut client = get_client().await?;
     let schedule_id = "sample-schedule";

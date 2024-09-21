@@ -6,7 +6,6 @@ use temporal_sdk_core_protos::coresdk::AsJsonPayloadExt;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenv::dotenv().ok();
-    env_logger::init();
 
     let client = get_client().await?;
 

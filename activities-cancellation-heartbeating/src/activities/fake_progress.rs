@@ -1,7 +1,7 @@
-use log::info;
 use std::time::Duration;
 use temporal_sdk::{ActContext, ActivityError};
 use temporal_sdk_core::protos::coresdk::{AsJsonPayloadExt, FromJsonPayloadExt};
+use tracing::info;
 
 pub async fn fake_progress(ctx: ActContext, sleep_interval_ms: u64) -> Result<u64, ActivityError> {
     // allow for resuming from heartbeat

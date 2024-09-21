@@ -1,14 +1,13 @@
 use helper::get_client;
-use log::info;
 use temporal_client::{WorkflowClientTrait, WorkflowService};
 use temporal_sdk_core::protos::temporal::api::schedule::v1::SchedulePatch;
 use temporal_sdk_core::protos::temporal::api::workflowservice::v1::PatchScheduleRequest;
+use tracing::info;
 use uuid::Uuid;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenv::dotenv().ok();
-    env_logger::init();
 
     let mut client = get_client().await?;
 
