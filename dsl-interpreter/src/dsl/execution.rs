@@ -7,7 +7,7 @@ use std::sync::{Arc, Mutex};
 use temporal_sdk_core_protos::coresdk::AsJsonPayloadExt;
 
 pub type Acts = Arc<HashMap<String, ProxyActivityFn<'static>>>;
-pub type Bindings = Arc<Mutex<HashMap<String, serde_json::Value>>>;
+pub type Bindings = Arc<Mutex<HashMap<String, String>>>;
 
 pub async fn execution(statement: Statement, bindings: Bindings, acts: Acts) {
     match statement {
@@ -20,7 +20,7 @@ pub async fn execution(statement: Statement, bindings: Bindings, acts: Acts) {
                     if let Some(value) = bindings.get(arg) {
                         value.clone()
                     } else {
-                        serde_json::Value::String(arg.clone())
+                        arg.clone()
                     }
                 })
                 .collect::<Vec<_>>();
@@ -29,9 +29,7 @@ pub async fn execution(statement: Statement, bindings: Bindings, acts: Acts) {
                 let mut bindings = bindings.lock().unwrap();
                 bindings.insert(
                     result,
-                    serde_json::Value::String(
-                        func.unwrap_ok_payload().deserialize::<String>().unwrap(),
-                    ),
+                    func.unwrap_ok_payload().deserialize::<String>().unwrap(),
                 );
             }
         }
