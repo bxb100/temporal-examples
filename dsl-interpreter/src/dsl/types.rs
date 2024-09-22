@@ -40,7 +40,7 @@ unsafe impl Send for ParallelStruct {}
 
 #[cfg(test)]
 mod tests {
-    use crate::dsl::dsl::*;
+    use crate::dsl::types::*;
 
     #[test]
     fn test_deserialize() {

@@ -1,3 +1,4 @@
+use crate::util::get_mod_simple_name;
 use std::future::Future;
 use std::sync::Arc;
 use temporal_sdk::{IntoActivityFunc, Worker, WorkflowFunction};
@@ -19,7 +20,7 @@ pub trait WorkerExt {
 }
 
 fn tuple_type_with_name<T>(t: T) -> (&'static str, T) {
-    (std::any::type_name::<T>(), t)
+    (get_mod_simple_name::<T>(), t)
 }
 
 impl WorkerExt for Worker {
@@ -31,11 +32,11 @@ impl WorkerExt for Worker {
         Ok(Worker::new_from_core(Arc::new(core_worker), task_queue))
     }
 
-    fn register_act<T, A, R, O>(&mut self, t: T) -> &mut Self
+    fn register_act<F, A, R, O>(&mut self, f: F) -> &mut Self
     where
-        T: IntoActivityFunc<A, R, O>,
+        F: IntoActivityFunc<A, R, O>,
     {
-        let (l, r) = tuple_type_with_name(t);
+        let (l, r) = tuple_type_with_name(f);
         self.register_activity(l, r);
         self
     }
