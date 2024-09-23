@@ -19,10 +19,6 @@ pub trait WorkerExt {
     ) -> &mut Self;
 }
 
-fn tuple_type_with_name<T>(t: T) -> (&'static str, T) {
-    (get_mod_simple_name::<T>(), t)
-}
-
 impl WorkerExt for Worker {
     async fn single(worker_config: WorkerConfig) -> anyhow::Result<Worker> {
         let task_queue = worker_config.task_queue.clone();
@@ -36,8 +32,8 @@ impl WorkerExt for Worker {
     where
         F: IntoActivityFunc<A, R, O>,
     {
-        let (l, r) = tuple_type_with_name(f);
-        self.register_activity(l, r);
+        let name = get_mod_simple_name::<F>();
+        self.register_activity(name, f);
         self
     }
 

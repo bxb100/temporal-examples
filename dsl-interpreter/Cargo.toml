@@ -22,4 +22,4 @@ nanoid.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 serde_yml = "0.0.12"
-async-scoped = {  version = "0.9", features = ["use-tokio"] }
+futures = "0.3.30"

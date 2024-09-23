@@ -1,13 +1,16 @@
 use temporal_sdk::{ActContext, ActExitValue, ActivityError};
-use log::info;
 
 pub async fn activity5(
     _ctx: ActContext,
     input: Vec<String>,
 ) -> Result<ActExitValue<String>, ActivityError> {
-    let input = &input[0];
-    info!("Executing activity5 {}", input);
-    Ok(ActExitValue::Normal(format!(
-        "[result from activity5: {input}]"
-    )))
+    if let [ref arg_arg3, ref arg_result4, ..] = input[..] {
+        return Ok(ActExitValue::Normal(format!(
+            r#"activity5 received:
+  arg3: {arg_arg3}:
+  result4: {arg_result4}:"#
+        )));
+    }
+
+    Err(anyhow::anyhow!("required 2 args, but only received {:#?} ", input).into())
 }

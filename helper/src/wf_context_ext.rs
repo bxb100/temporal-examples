@@ -17,31 +17,41 @@ pub struct ProxyActivityOptions {
     pub cancellation_type: ActivityCancellationType,
     pub retry_policy: Option<RetryPolicy>,
 }
+impl ProxyActivityOptions {
+    pub fn convert_to(self, activity_type: impl Into<String>, input: Payload) -> ActivityOptions {
+        ActivityOptions {
+            activity_type: activity_type.into(),
+            input,
+            activity_id: self.activity_id.clone(),
+            task_queue: self.task_queue.clone(),
+            schedule_to_start_timeout: self.schedule_to_start_timeout,
+            start_to_close_timeout: self.start_to_close_timeout,
+            schedule_to_close_timeout: self.schedule_to_close_timeout,
+            heartbeat_timeout: self.heartbeat_timeout,
+            cancellation_type: self.cancellation_type,
+            retry_policy: self.retry_policy.clone(),
+        }
+    }
+}
 
-/// see [BoxFuture](temporal_sdk::BoxFuture)
+/// see [BoxFuture](temporal_sdk::BoxFuture), the `Send` is required by [register_workflow](crate::worker_ext::WorkerExt::register_workflow)
 type PinProxyActivityFuture = Pin<Box<dyn CancellableFuture<ActivityResolution> + Send + 'static>>;
-pub type ProxyActivityFn<'a> = Box<dyn Fn(Payload) -> PinProxyActivityFuture + Send + Sync + 'a>;
 
 pub trait WfContextExt {
-    fn proxy_activity<T>(self: &Self, _: T, options: ProxyActivityOptions) -> ProxyActivityFn;
+    fn proxy_activity<T>(
+        self: &Self,
+        _: T,
+        options: ProxyActivityOptions,
+    ) -> impl Fn(Payload) -> PinProxyActivityFuture;
 }
 
 impl WfContextExt for WfContext {
-    fn proxy_activity<T>(self: &Self, _: T, options: ProxyActivityOptions) -> ProxyActivityFn {
+    fn proxy_activity<T>(
+        self: &Self,
+        _activity_func: T,
+        options: ProxyActivityOptions,
+    ) -> impl Fn(Payload) -> PinProxyActivityFuture {
         let name = get_mod_simple_name::<T>();
-        Box::new(move |input: Payload| {
-            Box::pin(self.activity(ActivityOptions {
-                activity_type: name.to_string(),
-                input,
-                activity_id: options.activity_id.clone(),
-                task_queue: options.task_queue.clone(),
-                schedule_to_start_timeout: options.schedule_to_start_timeout,
-                start_to_close_timeout: options.start_to_close_timeout,
-                schedule_to_close_timeout: options.schedule_to_close_timeout,
-                heartbeat_timeout: options.heartbeat_timeout,
-                cancellation_type: options.cancellation_type,
-                retry_policy: options.retry_policy.clone(),
-            }))
-        })
+        move |input: Payload| Box::pin(self.activity(options.clone().convert_to(name, input)))
     }
 }

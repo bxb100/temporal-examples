@@ -1,5 +1,5 @@
-use temporal_sdk::{ActContext, ActExitValue, ActivityError};
 use log::info;
+use temporal_sdk::{ActContext, ActExitValue, ActivityError};
 
 pub async fn activity1(
     _ctx: ActContext,
