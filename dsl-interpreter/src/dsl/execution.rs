@@ -22,11 +22,10 @@ pub async fn execution(
             let mut futures = vec![];
             for statement in parallel.branches {
                 let bindings = bindings.clone();
-                let ctx = ctx.clone();
                 let acts = acts.clone();
                 futures.push(
                     // why it's not need boxed?
-                    async move { Box::pin(execution(statement, bindings, &ctx, acts)).await },
+                    async move { Box::pin(execution(statement, bindings, ctx, acts)).await },
                 );
             }
             let _ = futures::future::join_all(futures).await;
