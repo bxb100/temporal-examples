@@ -16,9 +16,9 @@ async fn main() -> Result<()> {
     info!("{:?}", env::current_dir()?);
 
     // parse DSL configuration
-    let args = env::args().collect::<Vec<String>>();
+    let args = env::args().skip(1).collect::<Vec<String>>();
     let default_file = "workflow1.yaml".to_string();
-    let file = args.get(1).unwrap_or(&default_file);
+    let file = args.first().unwrap_or(&default_file);
     let dsl = serde_yml::from_str::<Dsl>(&fs::read_to_string(file)?)?;
 
     let client = get_client().await?;

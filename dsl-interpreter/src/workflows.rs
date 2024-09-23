@@ -42,7 +42,7 @@ pub async fn example(ctx: WfContext) -> WorkflowResult<()> {
     ));
     let bindings = Arc::new(Mutex::new(input.variables));
 
-    execution(input.root, bindings, &ctx, acts.clone()).await;
+    execution(input.root, bindings, &ctx, acts.clone()).await?;
 
     Ok(WfExitValue::Normal(()))
 }

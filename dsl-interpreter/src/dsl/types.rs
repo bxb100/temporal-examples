@@ -33,11 +33,6 @@ pub struct ParallelStruct {
     pub branches: Vec<Statement>,
 }
 
-unsafe impl Send for Statement {}
-unsafe impl Send for SequenceStruct {}
-unsafe impl Send for ActivityInvocation {}
-unsafe impl Send for ParallelStruct {}
-
 #[cfg(test)]
 mod tests {
     use crate::dsl::types::*;
