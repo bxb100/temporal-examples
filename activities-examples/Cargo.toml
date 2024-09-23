@@ -16,8 +16,8 @@ anyhow.workspace = true
 
 dotenv.workspace = true
 helper.workspace = true
-tracing.workspace = true
-tracing-subscriber.workspace = true
+log.workspace = true
+env_logger.workspace = true
 tokio = { workspace = true, features = ["time"]}
 nanoid.workspace = true
 reqwest = { workspace = true, features = ["json"] }

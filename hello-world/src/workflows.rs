@@ -1,10 +1,10 @@
 use crate::activities::greet;
 use helper::activity_resolution_ext::ActivityResolutionExt;
 use helper::wf_context_ext::{ProxyActivityOptions, WfContextExt};
+use log::info;
 use std::time::Duration;
 use temporal_sdk::{WfContext, WfExitValue, WorkflowResult};
 use temporal_sdk_core::protos::coresdk::{AsJsonPayloadExt, FromJsonPayloadExt};
-use tracing::info;
 
 /// A workflow that simply calls an activity
 pub async fn example(ctx: WfContext) -> WorkflowResult<String> {
