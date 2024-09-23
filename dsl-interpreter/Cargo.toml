@@ -1,0 +1,25 @@
+[package]
+name = "dsl-interpreter"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+default-run = "main"
+
+[dependencies]
+temporal-sdk.workspace = true
+temporal-client.workspace = true
+temporal-sdk-core.workspace = true
+temporal-sdk-core-protos.workspace = true
+helper.workspace = true
+
+anyhow.workspace = true
+dotenv.workspace = true
+log.workspace = true
+env_logger.workspace = true
+tokio.workspace = true
+nanoid.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_yml = "0.0.12"
+futures = "0.3.30"

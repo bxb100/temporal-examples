@@ -1,0 +1,9 @@
+import '../justfile'
+
+set allow-duplicate-recipes
+
+@workflow1:
+  cargo run --bin client -- workflow1.yaml
+
+@workflow2:
+  cargo run --bin client -- workflow2.yaml
