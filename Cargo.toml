@@ -36,8 +36,6 @@ reqwest = "0.12"
 prost-wkt-types = "0.6"
 uuid = { version = "1.10", features = ["v4"] }
 chrono = { version = "0.4", features = ["serde"]}
-tracing = "0.1.40"
-tracing-subscriber = { version = "0.3.18", features = ["registry", "env-filter"] }
 log = "0.4"
 env_logger = "0.11"
 

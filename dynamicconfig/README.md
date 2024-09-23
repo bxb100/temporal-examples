@@ -1,0 +1,3 @@
+- https://docs.temporal.io/references/dynamic-configuration
+- [constants.go](https://github.com/temporalio/temporal/blob/main/common/dynamicconfig/constants.go)
+- [docker-compose dynamic config](../docker-compose/dynamicconfig)
