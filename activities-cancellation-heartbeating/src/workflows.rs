@@ -1,4 +1,4 @@
-use tracing::info;
+use log::info;
 
 use crate::activities::fake_progress;
 use helper::activity_resolution_ext::ActivityResolutionExt;
