@@ -947,14 +947,14 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "dotenv",
+ "env_logger",
  "helper",
+ "log",
  "nanoid",
  "temporal-client",
  "temporal-sdk",
  "temporal-sdk-core",
  "tokio",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
