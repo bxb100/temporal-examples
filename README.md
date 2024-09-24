@@ -20,6 +20,7 @@ from [temporalio/samples-typescript](https://github.com/temporalio/samples-types
 | [custom-logger](./custom-logger)                                                  | [typescript version](https://github.com/temporalio/samples-typescript/tree/main/custom-logger)                        | `just s2`                                |
 | [dsl-interpreter](./dsl-interpreter)                                              | [typescript version](https://github.com/temporalio/samples-typescript/tree/main/dsl-interpreter)                      | `just workflow1` <br /> `just workflow2` |
 | [ejson](./ejson)                                                                  | [typescript version](https://github.com/temporalio/samples-typescript/tree/main/ejson)                                |                                          |
+| [empty](./empty)                                                                  | [typescript version](https://github.com/temporalio/samples-typescript/tree/main/empty)                                | `just gen {name}`                        |
 
 > 🦀 : means the example originally
 > from [temporal-samples-rust](https://github.com/cosm-public/temporal-samples-rust)
@@ -32,6 +33,7 @@ from [temporalio/samples-typescript](https://github.com/temporalio/samples-types
 
 - https://github.com/cosm-public/temporal-samples-rust
 - https://github.com/temporalio/sdk-core
+- https://github.com/cargo-generate/cargo-generate
 
 ## TODO
 

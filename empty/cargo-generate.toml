@@ -1,2 +1,6 @@
 [placeholders]
 project_version = { prompt = "Enter project version", type = "string" }
+[template]
+ignore = [
+    "README.md"
+]

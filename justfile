@@ -33,7 +33,7 @@ default:
 @gen project-name project-version='0.1.0':
   cargo new {{project-name}}
   rm {{project-name}}/src/main.rs
-  cargo generate -o --init --path {{justfile_directory()}}/.template --name {{project-name}} --destination {{project-name}} --define project_version={{project-version}}
+  cargo generate -o --init --path {{justfile_directory()}}/empty --name {{project-name}} --destination {{project-name}} --define project_version={{project-version}}
 
 # run a dev temporal server
 [group('dev-server-cli')]
