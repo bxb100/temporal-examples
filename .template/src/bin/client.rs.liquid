@@ -3,8 +3,8 @@ use helper::util::client::get_client;
 use helper::client_ext::ClientExt;
 use log::info;
 use nanoid::nanoid;
-use temporal_client::{WfClientExt, WorkflowClientTrait, WorkflowExecutionResult, WorkflowOptions};
-use temporal_sdk_core::protos::coresdk::{AsJsonPayloadExt, FromJsonPayloadExt};
+use temporal_client::{WorkflowClientTrait, WorkflowOptions};
+use temporal_sdk_core::protos::coresdk::AsJsonPayloadExt;
 
 #[tokio::main]
 async fn main() -> Result<()> {
