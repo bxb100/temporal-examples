@@ -14,7 +14,7 @@ impl DateTimeSerde {
     {
         let mut map = serializer.serialize_map(Some(1))?;
         // we use timestamp_millis() according to the ejson spec
-        // so attention not to use DateTime PartialEq 
+        // so attention not to use DateTime PartialEq
         map.serialize_entry("$date", &value.timestamp_millis())?;
         map.end()
     }

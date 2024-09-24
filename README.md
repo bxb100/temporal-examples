@@ -19,6 +19,7 @@ from [temporalio/samples-typescript](https://github.com/temporalio/samples-types
 | [search-attributes](./search-attributes)                                          | [typescript version](https://github.com/temporalio/samples-typescript/tree/main/search-attributes)                    | `just up` <br/> `just add`               |
 | [custom-logger](./custom-logger)                                                  | [typescript version](https://github.com/temporalio/samples-typescript/tree/main/custom-logger)                        | `just s2`                                |
 | [dsl-interpreter](./dsl-interpreter)                                              | [typescript version](https://github.com/temporalio/samples-typescript/tree/main/dsl-interpreter)                      | `just workflow1` <br /> `just workflow2` |
+| [ejson](./ejson)                                                                  | [typescript version](https://github.com/temporalio/samples-typescript/tree/main/ejson)                                |                                          |
 
 > 🦀 : means the example originally
 > from [temporal-samples-rust](https://github.com/cosm-public/temporal-samples-rust)

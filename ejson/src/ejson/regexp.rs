@@ -118,7 +118,7 @@ mod tests {
     #[test]
     fn test_regex() {
         let a = TestRegexpStruct {
-            v: Regex::new(".*Stormblessed").unwrap()
+            v: Regex::new(".*Stormblessed").unwrap(),
         };
 
         let json = serde_json::to_string(&a).unwrap();

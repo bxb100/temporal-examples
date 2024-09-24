@@ -1,4 +1,3 @@
-use crate::activities::greet;
 use crate::workflows::example;
 use anyhow::Result;
 use helper::core_runtime;
@@ -21,9 +20,5 @@ pub async fn start_worker() -> Result<()> {
 
     let mut worker = Worker::new_from_core(Arc::new(core_worker), "ejson".to_string());
 
-    worker
-        .register_act(greet)
-        .register_workflow("example", example)
-        .run()
-        .await
+    worker.register_workflow("example", example).run().await
 }

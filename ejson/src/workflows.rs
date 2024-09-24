@@ -1,27 +1,22 @@
-use crate::activities::greet;
-use helper::activity_resolution_ext::ActivityResolutionExt;
-use helper::wf_context_ext::{ProxyActivityOptions, WfContextExt};
+use crate::types::{Res, User};
+use chrono::Utc;
 use log::info;
-use std::time::Duration;
 use temporal_sdk::{WfContext, WfExitValue, WorkflowResult};
-use temporal_sdk_core::protos::coresdk::{AsJsonPayloadExt, FromJsonPayloadExt};
+use temporal_sdk_core::protos::coresdk::FromJsonPayloadExt;
 
-pub async fn example(ctx: WfContext) -> WorkflowResult<String> {
+pub async fn example(ctx: WfContext) -> WorkflowResult<Res> {
     let args = ctx.get_args();
 
-    let input = String::from_json_payload(args.first().unwrap())?;
-    info!("Starting workflow with input: {}", input);
+    let user = User::from_json_payload(args.first().unwrap())?;
+    info!("Starting workflow with input: {:?}", user);
 
-    let resolution = ctx.proxy_activity(
-        greet,
-        ProxyActivityOptions {
-            start_to_close_timeout: Some(Duration::from_secs(60)),
-            ..Default::default()
-        },
-    )(input.as_json_payload()?)
-    .await;
+    let success = user.created_at < Utc::now()
+        && user.hp > 50f64
+        && user.matcher.is_match("Kaladin Stormblessed")
+        && user.token == vec![1, 2, 3];
 
-    let v = resolution.parse_result::<String>()?;
-    info!("Activity completed with: {}", v);
-    Ok(WfExitValue::Normal(v))
+    Ok(WfExitValue::Normal(Res {
+        success,
+        at: Utc::now(),
+    }))
 }

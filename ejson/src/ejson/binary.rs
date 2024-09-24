@@ -37,9 +37,9 @@ impl BinarySerde {
             {
                 if let Some("$binary") = map.next_key()? {
                     let value: String = map.next_value()?;
-                    return Ok(BASE64_STANDARD
+                    return BASE64_STANDARD
                         .decode(value.as_bytes())
-                        .map_err(|e| Error::custom(e.to_string()))?);
+                        .map_err(|e| Error::custom(e.to_string()));
                 }
 
                 Err(Error::missing_field("$binary"))
