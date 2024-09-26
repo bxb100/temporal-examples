@@ -6,7 +6,7 @@ use temporal_sdk_core::init_worker;
 use temporal_sdk_core_api::worker::WorkerConfig;
 
 pub trait WorkerExt {
-    fn single(worker_config: WorkerConfig) -> impl Future<Output = anyhow::Result<Worker>> + Send;
+    fn single(worker_config: WorkerConfig) -> impl Future<Output = anyhow::Result<Worker>>;
 
     fn register_act<T, A, R, O>(&mut self, t: T) -> &mut Self
     where
