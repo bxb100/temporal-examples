@@ -6,7 +6,6 @@ use aes_gcm::{
 };
 use anyhow::anyhow;
 
-/// TAG_LENGTH_BYTES = 16 means
 pub fn encrypt(data: &[u8], key: &Key<Aes256Gcm>) -> anyhow::Result<Vec<u8>> {
     let nonce: Nonce<U12> = Aes256Gcm::generate_nonce(&mut OsRng);
     let cipher = Aes256Gcm::new(key);
@@ -21,7 +20,7 @@ pub fn decrypt(data: &[u8], key: &Key<Aes256Gcm>) -> anyhow::Result<Vec<u8>> {
     let (nonce, cipher_text) = data.split_at(12);
     let cipher = Aes256Gcm::new(key);
     cipher
-        .decrypt(GenericArray::from_slice(nonce), cipher_text.as_ref())
+        .decrypt(GenericArray::from_slice(nonce), cipher_text)
         .map_err(|e| anyhow!("{e}"))
 }
 
@@ -37,7 +36,7 @@ mod tests {
     use temporal_sdk_core_protos::temporal::api::common::v1::Payload;
 
     #[test]
-    fn ase_gcm_usage() -> anyhow::Result<()> {
+    fn aes_gcm_usage() -> anyhow::Result<()> {
         let key = Aes256Gcm::generate_key(OsRng);
 
         let ciphertext = encrypt(b"Alice: Private message for Bob.", &key)?;
@@ -48,9 +47,9 @@ mod tests {
         Ok(())
     }
 
-    use temporal_sdk_core_protos::coresdk::FromJsonPayloadExt;
     use prost::Message;
-    
+    use temporal_sdk_core_protos::coresdk::FromJsonPayloadExt;
+
     #[test]
     fn test_decrypt() -> anyhow::Result<()> {
         let data = "AMhwQ0cyyvbrvqu0FG1kM2AsHehe5Q3VoThOUpiyqva/ybgdOREhFg5fX+Q5MXlCm58H0CBLqJQG1jGt3SsdY1TxQk3XzHM6OnZDB829AlCzt1FmPsQN";
@@ -58,11 +57,27 @@ mod tests {
         let key = Key::<Aes256Gcm>::from_slice(b"test-key-test-key-test-key-test!");
 
         let plaintext = decrypt(&data, key)?;
+        
+        println!("{:?}", String::from_utf8(plaintext.clone())?);
 
         let payload = Payload::decode(plaintext.as_slice())?;
-        println!("{:?}", payload);
-        print!("{:?}", String::from_json_payload(&payload)?);
 
+        assert_eq!(
+            String::from_json_payload(&payload)?,
+            "Alice: Private message for Bob."
+        );
+
+        Ok(())
+    }
+    
+    #[test]
+    fn test2()-> anyhow::Result<()> {
+        let data = "OlrQ923J3vzL5/m5J+xph5Tzwovo/fma/OS+CDWHWIevCT0DaoTLQ5+48Fa5u0xRX6VEWy3IQHOOqzLUiyGihd/Fb2Jg//cPVLPe8CAUWlHKIuxsm1cjF6aCXi+g3e7/wV6fN17dUhEY5c1dYXxl/9t/Gye9vMLw0lMCM135Dm54ukrFixZKoOB7WJdC9uDuOHACE/nqgzePKBbAWYUSsAa/0VkvOmHS7BNnwA==";
+        let data = BASE64_STANDARD.decode(data)?;
+        let key = Key::<Aes256Gcm>::from_slice(b"test-key-test-key-test-key-test!");
+        // "\n\u{16}\n\u{8}encoding\u{12}\njson/plain\u{12}!\"Alice: Private message for Bob.\""
+        let plaintext = decrypt(&data, key)?;
+        println!("{:?}",  String::from_utf8(plaintext.clone())?);
         Ok(())
     }
 }

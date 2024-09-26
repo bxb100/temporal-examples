@@ -1,27 +1,25 @@
-use crate::activities::greet;
-use helper::activity_resolution_ext::ActivityResolutionExt;
-use helper::wf_context_ext::{ProxyActivityOptions, WfContextExt};
+use crate::worker;
 use log::info;
-use std::time::Duration;
+use prost::Message;
 use temporal_sdk::{WfContext, WfExitValue, WorkflowResult};
-use temporal_sdk_core::protos::coresdk::{AsJsonPayloadExt, FromJsonPayloadExt};
+use temporal_sdk_core::protos::coresdk::AsJsonPayloadExt;
 
-pub async fn example(ctx: WfContext) -> WorkflowResult<String> {
+pub async fn example(ctx: WfContext) -> WorkflowResult<Vec<u8>> {
     let args = ctx.get_args();
+    // let data = &args[0].data;
+    info!("Received message: {:?}", args[0]);
 
-    let input = String::from_json_payload(args.first().unwrap())?;
-    info!("Starting workflow with input: {}", input);
+    // let encrypted_payload = Payload::decode(data.as_slice())?;
 
-    let resolution = ctx.proxy_activity(
-        greet,
-        ProxyActivityOptions {
-            start_to_close_timeout: Some(Duration::from_secs(60)),
-            ..Default::default()
-        },
-    )(input.as_json_payload()?)
-    .await;
+    let codec = unsafe { worker::ONCE.get_mut().unwrap() };
+    let payloads = codec.decode(vec![&args[0]]).await?;
 
-    let v = resolution.parse_result::<String>()?;
-    info!("Activity completed with: {}", v);
-    Ok(WfExitValue::Normal(v))
+    let message = serde_json::from_slice::<String>(&payloads[0].data)?;
+    info!("Decoded message: {:?}", message);
+
+    let msg = format!("{message}\nBob: Hi Alice, I'm Workflow Bob.");
+
+    let payload = msg.as_json_payload()?;
+    let encoded = codec.encode(vec![&payload])?;
+    Ok(WfExitValue::Normal(encoded[0].encode_to_vec()))
 }

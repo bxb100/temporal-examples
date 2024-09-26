@@ -48,11 +48,7 @@ pub async fn execution(
             let options = acts.get(&activity_name).unwrap();
             // execution activity
             let res = ctx
-                .activity(
-                    options
-                        .clone()
-                        .convert_to(activity_name, args.as_json_payload()?),
-                )
+                .activity(options.convert_to(activity_name, args.as_json_payload()?))
                 .await;
             if activity.result.is_some() {
                 let mut bindings = bindings

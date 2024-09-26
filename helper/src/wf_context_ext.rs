@@ -18,7 +18,7 @@ pub struct ProxyActivityOptions {
     pub retry_policy: Option<RetryPolicy>,
 }
 impl ProxyActivityOptions {
-    pub fn convert_to(self, activity_type: impl Into<String>, input: Payload) -> ActivityOptions {
+    pub fn convert_to(&self, activity_type: impl Into<String>, input: Payload) -> ActivityOptions {
         ActivityOptions {
             activity_type: activity_type.into(),
             input,
@@ -52,6 +52,6 @@ impl WfContextExt for WfContext {
         options: ProxyActivityOptions,
     ) -> impl Fn(Payload) -> PinProxyActivityFuture {
         let name = get_mod_simple_name::<T>();
-        move |input: Payload| Box::pin(self.activity(options.clone().convert_to(name, input)))
+        move |input: Payload| Box::pin(self.activity(options.convert_to(name, input)))
     }
 }

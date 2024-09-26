@@ -711,6 +711,7 @@ dependencies = [
  "log",
  "nanoid",
  "prost",
+ "serde_json",
  "temporal-client",
  "temporal-sdk",
  "temporal-sdk-core",

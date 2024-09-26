@@ -1,6 +1,7 @@
 use anyhow::Result;
-use helper::util::client::get_client;
+use encryption::worker::{init_codec, ONCE};
 use helper::client_ext::ClientExt;
+use helper::util::client::get_client;
 use log::info;
 use nanoid::nanoid;
 use temporal_client::{WorkflowClientTrait, WorkflowOptions};
@@ -11,16 +12,23 @@ async fn main() -> Result<()> {
     dotenv::dotenv().ok();
     env_logger::init();
 
+    let codec = unsafe {
+        init_codec().await;
+        ONCE.get_mut().unwrap()
+    };
+
     let client = get_client().await?;
 
     let workflow_id = format!("workflow-{}", nanoid!());
 
     let handle = client
         .start_workflow(
-            vec!["Temporal".as_json_payload()?],
+            codec
+                .encode(vec![&"Alice: Private message for Bob.".as_json_payload()?])
+                .unwrap(),
             "encryption".to_string(), // task queue
-            workflow_id.to_owned(),           // workflow id
-            "example".to_string(),            // workflow type
+            workflow_id.to_owned(),   // workflow id
+            "example".to_string(),    // workflow type
             None,
             WorkflowOptions::default(),
         )
@@ -32,10 +40,10 @@ async fn main() -> Result<()> {
     );
 
     let res = client
-        .get_workflow_result::<String>(workflow_id, handle.run_id)
+        .get_workflow_result::<Vec<u8>>(workflow_id, handle.run_id)
         .await?;
 
-    info!("Result: {}", res);
+    info!("Result: {:?}", res);
 
     Ok(())
 }
