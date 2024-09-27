@@ -1,8 +1,8 @@
 use crate::encryption_codec::EncryptionCodec;
 use crate::workflows::example;
 use anyhow::Result;
-use std::sync::Arc;
 use std::str::FromStr;
+use std::sync::Arc;
 use temporal_sdk::{sdk_client_options, Codec, Worker};
 use temporal_sdk_core::api::telemetry::TelemetryOptionsBuilder;
 use temporal_sdk_core::{init_worker, CoreRuntime, Url, WorkerConfigBuilder};
