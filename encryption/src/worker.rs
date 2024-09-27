@@ -23,7 +23,7 @@ pub async fn start_worker() -> Result<()> {
     let mut worker = Worker::new_from_core(Arc::new(core_worker), "encryption".to_string());
 
     worker
-        .register_workflow("example", Box::new(example))
+        .register_workflow("example", example)
         .run()
         .await
 }

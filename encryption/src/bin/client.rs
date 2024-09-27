@@ -4,6 +4,7 @@ use helper::client_ext::ClientExt;
 use helper::util::client::get_client;
 use log::info;
 use nanoid::nanoid;
+use encryption::types::EncryptionPayload;
 use temporal_client::{WorkflowClientTrait, WorkflowOptions};
 use temporal_sdk_core::protos::coresdk::AsJsonPayloadExt;
 
@@ -40,7 +41,7 @@ async fn main() -> Result<()> {
     );
 
     let res = client
-        .get_workflow_result::<Vec<u8>>(workflow_id, handle.run_id)
+        .get_workflow_result::<EncryptionPayload>(workflow_id, handle.run_id)
         .await?;
 
     info!("Result: {:?}", res);

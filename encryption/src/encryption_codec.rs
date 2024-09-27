@@ -1,11 +1,9 @@
 use crate::aes_gcm::{decrypt, encrypt};
 use aes_gcm::{Aes256Gcm, Key};
 use anyhow::anyhow;
-use helper::payload_ext::PayloadExt;
 use log::info;
 use prost::Message;
 use std::collections::HashMap;
-use temporal_sdk_core_protos::coresdk::AsJsonPayloadExt;
 use temporal_sdk_core_protos::temporal::api::common::v1::Payload;
 use temporal_sdk_core_protos::ENCODING_PAYLOAD_KEY;
 
