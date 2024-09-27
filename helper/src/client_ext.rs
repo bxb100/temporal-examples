@@ -34,8 +34,11 @@ where
                 .await?
             {
                 WorkflowExecutionResult::Succeeded(res) => {
-                    let p = Payload::try_from(Payloads { payloads: res })
+                    let mut p = Payload::try_from(Payloads { payloads: res })
                         .map_err(|e| anyhow!("{}", e))?;
+                    if let Some(codec) = self.get_codec() {
+                        p = (codec.decode)(&p);
+                    }
                     Ok(p.deserialize()?)
                 }
                 other => Err(anyhow::anyhow!("Workflow did not succeed {:?}", other)),

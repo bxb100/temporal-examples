@@ -57,7 +57,7 @@ mod tests {
         let key = Key::<Aes256Gcm>::from_slice(b"test-key-test-key-test-key-test!");
 
         let plaintext = decrypt(&data, key)?;
-        
+
         println!("{:?}", String::from_utf8(plaintext.clone())?);
 
         let payload = Payload::decode(plaintext.as_slice())?;
@@ -69,15 +69,15 @@ mod tests {
 
         Ok(())
     }
-    
+
     #[test]
-    fn test2()-> anyhow::Result<()> {
+    fn test2() -> anyhow::Result<()> {
         let data = "OlrQ923J3vzL5/m5J+xph5Tzwovo/fma/OS+CDWHWIevCT0DaoTLQ5+48Fa5u0xRX6VEWy3IQHOOqzLUiyGihd/Fb2Jg//cPVLPe8CAUWlHKIuxsm1cjF6aCXi+g3e7/wV6fN17dUhEY5c1dYXxl/9t/Gye9vMLw0lMCM135Dm54ukrFixZKoOB7WJdC9uDuOHACE/nqgzePKBbAWYUSsAa/0VkvOmHS7BNnwA==";
         let data = BASE64_STANDARD.decode(data)?;
         let key = Key::<Aes256Gcm>::from_slice(b"test-key-test-key-test-key-test!");
         // "\n\u{16}\n\u{8}encoding\u{12}\njson/plain\u{12}!\"Alice: Private message for Bob.\""
         let plaintext = decrypt(&data, key)?;
-        println!("{:?}",  String::from_utf8(plaintext.clone())?);
+        println!("{:?}", String::from_utf8(plaintext.clone())?);
         Ok(())
     }
 }

@@ -17,9 +17,9 @@ const ENCODING: &str = "binary/encrypted";
 const METADATA_ENCRYPTION_KEY_ID: &str = "encryption-key-id";
 
 impl EncryptionCodec {
-    pub async fn create(key_id: String) -> Self {
+    pub fn create(key_id: String) -> Self {
         let mut keys = HashMap::new();
-        let key = fetch_key(&key_id).await;
+        let key = fetch_key(&key_id);
         keys.insert(key_id.to_string(), key);
         EncryptionCodec {
             default_key_id: key_id.to_string(),
@@ -31,6 +31,7 @@ impl EncryptionCodec {
         let mut res = Vec::new();
 
         for payload in payloads {
+            info!("Encoding payload: {:?}", payload);
             let mut metadata = HashMap::new();
             metadata.insert(
                 ENCODING_PAYLOAD_KEY.to_string(),
@@ -54,7 +55,7 @@ impl EncryptionCodec {
         Ok(res)
     }
 
-    pub async fn decode(&mut self, payloads: Vec<&Payload>) -> anyhow::Result<Vec<Payload>> {
+    pub fn decode(&mut self, payloads: Vec<&Payload>) -> anyhow::Result<Vec<Payload>> {
         let mut res = Vec::new();
         for payload in payloads {
             if !payload
@@ -80,7 +81,7 @@ impl EncryptionCodec {
             info!("{:?}", key_id);
             let mut key = self.keys.get(&key_id).cloned();
             if key.is_none() {
-                let new_key = fetch_key(&key_id).await;
+                let new_key = fetch_key(&key_id);
                 self.keys.insert(key_id, new_key);
                 // why not clone
                 key = Some(new_key);
@@ -96,7 +97,7 @@ impl EncryptionCodec {
     }
 }
 
-pub async fn fetch_key(_key_id: &str) -> Key<Aes256Gcm> {
+pub fn fetch_key(_key_id: &str) -> Key<Aes256Gcm> {
     // In production, fetch key from a key management system (KMS). You may want to memoize requests if you'll be decoding
     // Payloads that were encrypted using keys other than defaultKey
     let key = b"test-key-test-key-test-key-test!";
@@ -111,7 +112,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_encryption_codec() {
-        let codec = EncryptionCodec::create("".to_string()).await;
+        let codec = EncryptionCodec::create("".to_string());
         let payload = "Alice: Private message for Bob.".as_json_payload().unwrap();
         let p = codec.encode(vec![&payload]).unwrap();
 
