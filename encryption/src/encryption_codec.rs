@@ -6,6 +6,16 @@ use prost::Message;
 use std::collections::HashMap;
 use temporal_sdk_core_protos::temporal::api::common::v1::Payload;
 use temporal_sdk_core_protos::ENCODING_PAYLOAD_KEY;
+use tokio::sync::OnceCell;
+
+pub static mut ONCE: OnceCell<EncryptionCodec> = OnceCell::const_new();
+
+pub async fn init_codec(key_id: String) -> anyhow::Result<()> {
+    unsafe {
+        ONCE.set(EncryptionCodec::create(key_id).await)?;
+    }
+    Ok(())
+}
 
 #[derive(Debug)]
 pub struct EncryptionCodec {
@@ -17,9 +27,9 @@ const ENCODING: &str = "binary/encrypted";
 const METADATA_ENCRYPTION_KEY_ID: &str = "encryption-key-id";
 
 impl EncryptionCodec {
-    pub fn create(key_id: String) -> Self {
+    pub async fn create(key_id: String) -> Self {
         let mut keys = HashMap::new();
-        let key = fetch_key(&key_id);
+        let key = fetch_key(&key_id).await;
         keys.insert(key_id.to_string(), key);
         EncryptionCodec {
             default_key_id: key_id.to_string(),
@@ -79,15 +89,8 @@ impl EncryptionCodec {
             let key_id_bytes = key_id_bytes.unwrap();
             let key_id = String::from_utf8(key_id_bytes.to_vec())?;
             info!("{:?}", key_id);
-            let mut key = self.keys.get(&key_id).cloned();
-            if key.is_none() {
-                let new_key = fetch_key(&key_id);
-                self.keys.insert(key_id, new_key);
-                // why not clone
-                key = Some(new_key);
-            }
-            let key = key.unwrap();
-            let decrypted_payload_bytes = decrypt(&payload.data, &key)?;
+            let key = self.keys.get(&key_id).ok_or(anyhow!("Key not found"))?;
+            let decrypted_payload_bytes = decrypt(&payload.data, key)?;
             info!("Decrypting payload.data: {:?}", payload.data);
 
             res.push(Payload::decode(decrypted_payload_bytes.as_slice())?);
@@ -97,7 +100,7 @@ impl EncryptionCodec {
     }
 }
 
-pub fn fetch_key(_key_id: &str) -> Key<Aes256Gcm> {
+pub async fn fetch_key(_key_id: &str) -> Key<Aes256Gcm> {
     // In production, fetch key from a key management system (KMS). You may want to memoize requests if you'll be decoding
     // Payloads that were encrypted using keys other than defaultKey
     let key = b"test-key-test-key-test-key-test!";
@@ -112,7 +115,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_encryption_codec() {
-        let codec = EncryptionCodec::create("".to_string());
+        let codec = EncryptionCodec::create("".to_string()).await;
         let payload = "Alice: Private message for Bob.".as_json_payload().unwrap();
         let p = codec.encode(vec![&payload]).unwrap();
 

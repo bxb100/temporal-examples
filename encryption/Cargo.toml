@@ -10,7 +10,7 @@ default-run = "main"
 temporal-client = { git = "https://github.com/Lemon-Fork-Repository/sdk-core.git" }
 temporal-sdk = { git = "https://github.com/Lemon-Fork-Repository/sdk-core.git" }
 temporal-sdk-core = { git = "https://github.com/Lemon-Fork-Repository/sdk-core.git" }
-temporal-sdk-core-protos = { git = "https://github.com/Lemon-Fork-Repository/sdk-core.git" }
+temporal-sdk-core-protos = { git = "https://github.com/Lemon-Fork-Repository/sdk-core.git", features = ["serde_serialize"] }
 
 anyhow.workspace = true
 dotenv.workspace = true
@@ -23,3 +23,5 @@ base64.workspace = true
 aes-gcm = "0.10"
 serde_json.workspace = true
 serde = { version = "1.0.208", features = ["derive"] }
+axum = "0.7"
+tower-http = { version = "0.6", features = ["cors"] }

@@ -1,5 +1,5 @@
 use anyhow::{anyhow, Result};
-use encryption::worker::{init_codec, ONCE};
+use encryption::encryption_codec::{init_codec, ONCE};
 use log::info;
 use nanoid::nanoid;
 use std::str::FromStr;
@@ -18,13 +18,11 @@ async fn main() -> Result<()> {
     dotenv::dotenv().ok();
     env_logger::init();
 
-    unsafe {
-        init_codec().await;
-    };
-
     let server_options = sdk_client_options(Url::from_str("http://localhost:7233")?).build()?;
 
     let mut client = server_options.connect("default", None).await?;
+
+    init_codec("test-key-id".to_string()).await?;
 
     client.get_client_mut().set_codec(Codec {
         encode: Arc::new(Box::new(|payload| unsafe {
